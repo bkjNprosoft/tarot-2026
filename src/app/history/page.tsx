@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { apiClient, ReadingResult } from '@/lib/api-client';
-import { getCardById } from '@/lib/tarot/tarot-data';
-import { CATEGORIES } from '@/lib/tarot/categories';
+import { apiClient, ReadingResult } from '@/shared/api';
+import { getCardById } from '@/entities/tarot-card';
+import { CATEGORIES } from '@/entities/category';
 
 export default function HistoryPage() {
   const router = useRouter();

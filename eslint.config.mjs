@@ -10,6 +10,7 @@ const eslintConfig = defineConfig([
   {
     rules: {
       'prettier/prettier': 'error',
+      'react/no-unescaped-entities': 'off',
     },
   },
   // Override default ignores of eslint-config-next.

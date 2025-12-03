@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { apiClient, ReadingResult } from '@/lib/api-client';
-import { TAROT_CARDS, getCardById } from '@/lib/tarot/tarot-data';
-import { CATEGORIES } from '@/lib/tarot/categories';
+import { apiClient, ReadingResult } from '@/shared/api';
+import { TAROT_CARDS, getCardById } from '@/entities/tarot-card';
+import { CATEGORIES } from '@/entities/category';
 
 export default function ResultPage() {
   const params = useParams();

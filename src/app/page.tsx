@@ -1,5 +1,5 @@
-import { CATEGORY_CONFIG, ReadingCategory } from '@/lib/tarot/categories';
-import CategoryCard from '@/components/CategoryCard';
+import { CATEGORY_CONFIG, ReadingCategory } from '@/entities/category/config/categories';
+import CategoryCard from '@/entities/category/ui/CategoryCard';
 
 export default function HomePage() {
   const categories = Object.entries(CATEGORY_CONFIG);
