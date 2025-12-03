@@ -1,0 +1,161 @@
+
+> frontend@0.1.0 build
+> next build
+
+   ▲ Next.js 16.0.6 (Turbopack)
+   - Environments: .env
+
+   Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 6 errors:
+./app/category/[slug]/page.tsx:6:1
+Export CATEGORIES doesn't exist in target module
+[0m [90m 4 |[39m [36mimport[39m { useParams[33m,[39m useRouter } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m { motion } [36mfrom[39m [32m'framer-motion'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mCATEGORIES[39m } [36mfrom[39m [32m'@/lib/tarot/categories'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 7 |[39m [36mimport[39m { [33mTAROT_CARDS[39m } [36mfrom[39m [32m'@/lib/tarot/tarot-data'[39m[33m;[39m
+ [90m 8 |[39m [36mimport[39m { apiClient } [36mfrom[39m [32m'@/lib/api-client'[39m[33m;[39m
+ [90m 9 |[39m[0m
+
+The export CATEGORIES was not found in module [project]/lib/tarot/categories.ts [app-client] (ecmascript).
+Did you mean to import CATEGORY_CONFIG?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/category/[slug]/page.tsx [Client Component Browser]
+    ./app/category/[slug]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/category/[slug]/page.tsx [Client Component SSR]
+    ./app/category/[slug]/page.tsx [Server Component]
+
+
+./app/category/[slug]/page.tsx:6:1
+Export CATEGORIES doesn't exist in target module
+[0m [90m 4 |[39m [36mimport[39m { useParams[33m,[39m useRouter } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m { motion } [36mfrom[39m [32m'framer-motion'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mCATEGORIES[39m } [36mfrom[39m [32m'@/lib/tarot/categories'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 7 |[39m [36mimport[39m { [33mTAROT_CARDS[39m } [36mfrom[39m [32m'@/lib/tarot/tarot-data'[39m[33m;[39m
+ [90m 8 |[39m [36mimport[39m { apiClient } [36mfrom[39m [32m'@/lib/api-client'[39m[33m;[39m
+ [90m 9 |[39m[0m
+
+The export CATEGORIES was not found in module [project]/lib/tarot/categories.ts [app-ssr] (ecmascript).
+Did you mean to import CATEGORY_CONFIG?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/category/[slug]/page.tsx [Client Component Browser]
+    ./app/category/[slug]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/category/[slug]/page.tsx [Client Component SSR]
+    ./app/category/[slug]/page.tsx [Server Component]
+
+
+./app/history/page.tsx:8:1
+Export CATEGORIES doesn't exist in target module
+[0m [90m  6 |[39m [36mimport[39m { apiClient[33m,[39m [33mReadingResult[39m } [36mfrom[39m [32m'@/lib/api-client'[39m[33m;[39m
+ [90m  7 |[39m [36mimport[39m { getCardById } [36mfrom[39m [32m'@/lib/tarot/tarot-data'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mCATEGORIES[39m } [36mfrom[39m [32m'@/lib/tarot/categories'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  9 |[39m
+ [90m 10 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mHistoryPage[39m() {
+ [90m 11 |[39m   [36mconst[39m router [33m=[39m useRouter()[33m;[39m[0m
+
+The export CATEGORIES was not found in module [project]/lib/tarot/categories.ts [app-client] (ecmascript).
+Did you mean to import CATEGORY_CONFIG?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/history/page.tsx [Client Component Browser]
+    ./app/history/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/history/page.tsx [Client Component SSR]
+    ./app/history/page.tsx [Server Component]
+
+
+./app/history/page.tsx:8:1
+Export CATEGORIES doesn't exist in target module
+[0m [90m  6 |[39m [36mimport[39m { apiClient[33m,[39m [33mReadingResult[39m } [36mfrom[39m [32m'@/lib/api-client'[39m[33m;[39m
+ [90m  7 |[39m [36mimport[39m { getCardById } [36mfrom[39m [32m'@/lib/tarot/tarot-data'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mCATEGORIES[39m } [36mfrom[39m [32m'@/lib/tarot/categories'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  9 |[39m
+ [90m 10 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mHistoryPage[39m() {
+ [90m 11 |[39m   [36mconst[39m router [33m=[39m useRouter()[33m;[39m[0m
+
+The export CATEGORIES was not found in module [project]/lib/tarot/categories.ts [app-ssr] (ecmascript).
+Did you mean to import CATEGORY_CONFIG?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/history/page.tsx [Client Component Browser]
+    ./app/history/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/history/page.tsx [Client Component SSR]
+    ./app/history/page.tsx [Server Component]
+
+
+./app/result/[id]/page.tsx:8:1
+Export CATEGORIES doesn't exist in target module
+[0m [90m  6 |[39m [36mimport[39m { apiClient[33m,[39m [33mReadingResult[39m } [36mfrom[39m [32m'@/lib/api-client'[39m[33m;[39m
+ [90m  7 |[39m [36mimport[39m { [33mTAROT_CARDS[39m[33m,[39m getCardById } [36mfrom[39m [32m'@/lib/tarot/tarot-data'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mCATEGORIES[39m } [36mfrom[39m [32m'@/lib/tarot/categories'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  9 |[39m
+ [90m 10 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mResultPage[39m() {
+ [90m 11 |[39m   [36mconst[39m params [33m=[39m useParams()[33m;[39m[0m
+
+The export CATEGORIES was not found in module [project]/lib/tarot/categories.ts [app-client] (ecmascript).
+Did you mean to import CATEGORY_CONFIG?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/result/[id]/page.tsx [Client Component Browser]
+    ./app/result/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/result/[id]/page.tsx [Client Component SSR]
+    ./app/result/[id]/page.tsx [Server Component]
+
+
+./app/result/[id]/page.tsx:8:1
+Export CATEGORIES doesn't exist in target module
+[0m [90m  6 |[39m [36mimport[39m { apiClient[33m,[39m [33mReadingResult[39m } [36mfrom[39m [32m'@/lib/api-client'[39m[33m;[39m
+ [90m  7 |[39m [36mimport[39m { [33mTAROT_CARDS[39m[33m,[39m getCardById } [36mfrom[39m [32m'@/lib/tarot/tarot-data'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  8 |[39m [36mimport[39m { [33mCATEGORIES[39m } [36mfrom[39m [32m'@/lib/tarot/categories'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  9 |[39m
+ [90m 10 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mResultPage[39m() {
+ [90m 11 |[39m   [36mconst[39m params [33m=[39m useParams()[33m;[39m[0m
+
+The export CATEGORIES was not found in module [project]/lib/tarot/categories.ts [app-ssr] (ecmascript).
+Did you mean to import CATEGORY_CONFIG?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/result/[id]/page.tsx [Client Component Browser]
+    ./app/result/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/result/[id]/page.tsx [Client Component SSR]
+    ./app/result/[id]/page.tsx [Server Component]
+
+
+    at <unknown> (./app/category/[slug]/page.tsx:6:1)
+    at <unknown> (./app/category/[slug]/page.tsx:6:1)
+    at <unknown> (./app/history/page.tsx:8:1)
+    at <unknown> (./app/history/page.tsx:8:1)
+    at <unknown> (./app/result/[id]/page.tsx:8:1)
+    at <unknown> (./app/result/[id]/page.tsx:8:1)
