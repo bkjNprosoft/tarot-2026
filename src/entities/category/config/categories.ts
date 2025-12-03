@@ -85,6 +85,23 @@ export const CATEGORY_CONFIG: Record<ReadingCategory, CategoryConfig> = {
   },
 };
 
+export interface Category {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  gradient: string;
+  icon: string;
+  emoji: string;
+}
+
+export const CATEGORIES: Category[] = Object.entries(CATEGORY_CONFIG).map(
+  ([id, config]) => ({
+    id,
+    ...config,
+  })
+);
+
 export function getCategoryBySlug(slug: string): ReadingCategory | null {
   const category = Object.values(ReadingCategory).find((cat) => cat === slug);
   return category || null;

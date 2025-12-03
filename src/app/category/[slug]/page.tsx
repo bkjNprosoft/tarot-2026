@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { CATEGORIES } from '@/lib/tarot/categories';
-import { TAROT_CARDS } from '@/lib/tarot/tarot-data';
-import { apiClient } from '@/lib/api-client';
+import { CATEGORIES } from '@/entities/category';
+import { TAROT_CARDS } from '@/entities/tarot-card';
+import { apiClient } from '@/shared/api';
 
 export default function CategoryPage() {
   const params = useParams();

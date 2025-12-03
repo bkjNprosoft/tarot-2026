@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import type { CategoryConfig } from '@/lib/tarot/categories';
+import { motion } from 'motion/react';
+import type { CategoryConfig } from '@/entities/category/config/categories';
 
 interface CategoryCardProps {
   slug: string;
