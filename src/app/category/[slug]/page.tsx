@@ -36,7 +36,7 @@ export default function CategoryPage() {
     setIsSaving(true);
 
     try {
-      // 2. Save to Supabase
+      // 2. Save to localStorage
       const result = await apiClient.saveReading({
         category: slug,
         cards: [pickedCard.id],

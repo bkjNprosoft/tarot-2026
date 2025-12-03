@@ -3132,3 +3132,30 @@ export function getMinorArcana(): TarotCard[] {
 export function getCardsBySuit(suit: string): TarotCard[] {
   return TAROT_CARDS.filter((card) => card.suit === suit);
 }
+
+/**
+ * 카드의 이미지 경로를 실제 파일명으로 업데이트
+ * 새로운 파일명 형식:
+ * - Major: major_00_fool.jpg (number_id 형식)
+ * - Minor: swords_00.jpg (suit_number 형식)
+ */
+function updateCardImages() {
+  TAROT_CARDS.forEach((card) => {
+    if (card.arcana === 'Major') {
+      // Major 카드: major_00_fool.jpg 형식
+      const paddedNumber = card.number.toString().padStart(2, '0');
+      const fileName = `major_${paddedNumber}_${card.id}.jpg`;
+      card.image = `/images/tarot/major/${fileName}`;
+    } else if (card.suit) {
+      // Minor 카드: swords_00.jpg 형식
+      const suitFolder = card.suit.toLowerCase();
+      // Minor 카드는 1부터 시작하지만 파일명은 00부터 시작 (0-based index)
+      const fileNumber = (card.number - 1).toString().padStart(2, '0');
+      const fileName = `${suitFolder}_${fileNumber}.jpg`;
+      card.image = `/images/tarot/${suitFolder}/${fileName}`;
+    }
+  });
+}
+
+// 카드 이미지 경로 업데이트 실행
+updateCardImages();

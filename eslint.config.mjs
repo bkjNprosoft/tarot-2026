@@ -9,7 +9,12 @@ const eslintConfig = defineConfig([
   prettier, // Must be last to override other configs
   {
     rules: {
-      'prettier/prettier': 'error',
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+        },
+      ],
       'react/no-unescaped-entities': 'off',
     },
   },

@@ -1,4 +1,7 @@
-import { CATEGORY_CONFIG, ReadingCategory } from '@/entities/category/config/categories';
+import {
+  CATEGORY_CONFIG,
+  ReadingCategory,
+} from '@/entities/category/config/categories';
 import CategoryCard from '@/entities/category/ui/CategoryCard';
 
 export default function HomePage() {
