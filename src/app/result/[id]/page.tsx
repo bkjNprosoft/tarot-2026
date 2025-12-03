@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { apiClient, ReadingResult } from '@/shared/api';
 import { getCardById } from '@/entities/tarot-card';
 import { CATEGORIES } from '@/entities/category';
 import { useToast } from '@/shared/ui/toast';
+import { ShareButton } from '@/shared/ui/share';
 
 export default function ResultPage() {
   const params = useParams();
@@ -17,6 +18,7 @@ export default function ResultPage() {
   const [loading, setLoading] = useState(true);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const toast = useToast();
+  const shareElementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function fetchReading() {
@@ -100,11 +102,20 @@ export default function ResultPage() {
   // AI 해석 여부 확인
   const hasAIInterpretation = !!reading.aiInterpretation;
 
+  // 공유용 정보 준비
+  const shareTitle = `${category.title} 운세 - 2026 신년운세 타로`;
+  const shareText = cards.length === 3
+    ? `${cards.map((c) => c.nameKr).join(', ')} - ${category.title} 운세`
+    : `${cards[0]?.nameKr} - ${category.title} 운세`;
+  const shareUrl =
+    typeof window !== 'undefined' ? `${window.location.origin}/result/${id}` : '';
+
   return (
     <div
       className={`min-h-screen w-full bg-gradient-to-b ${category.gradient} text-white p-4 md:p-8 overflow-y-auto`}
+      ref={shareElementRef}
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -150,7 +161,7 @@ export default function ResultPage() {
                 <h3 className="mt-4 text-xl font-bold">
                   {card.nameKr}
                   {cardOrientations[index] && (
-                    <span className="ml-2 text-sm text-yellow-300">[역위]</span>
+                    <span className="ml-2 text-sm text-yellow-300">[역방향]</span>
                   )}
                 </h3>
                 <p className="text-sm opacity-80">{card.name}</p>
@@ -295,7 +306,7 @@ export default function ResultPage() {
               {cardOrientations[0] && (
                 <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-3 mb-4">
                   <p className="text-yellow-300 font-bold text-center">
-                    이 카드는 역위(Reversed)로 뽑혔습니다
+                    이 카드는 역방향으로 뽑혔습니다
                   </p>
                 </div>
               )}
@@ -345,7 +356,7 @@ export default function ResultPage() {
           </motion.div>
         )}
 
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-4 flex-wrap">
           <button
             onClick={() => router.push('/')}
             className="px-8 py-3 bg-white text-slate-900 rounded-full font-bold hover:bg-slate-100 transition-colors shadow-lg cursor-pointer"
@@ -358,6 +369,12 @@ export default function ResultPage() {
           >
             기록 보기
           </button>
+          <ShareButton
+            shareElementRef={shareElementRef}
+            title={shareTitle}
+            text={shareText}
+            url={shareUrl}
+          />
         </div>
       </div>
     </div>

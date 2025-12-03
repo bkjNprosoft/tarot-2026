@@ -24,7 +24,9 @@ export default function CategoryPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [clickedCardIndex, setClickedCardIndex] = useState<number | null>(null);
+  const [touchedCardIndex, setTouchedCardIndex] = useState<number | null>(null);
   const toast = useToast();
+  const [windowWidth, setWindowWidth] = useState(0);
   // 각 카드의 셔플 애니메이션 랜덤 값을 초기값으로 생성 (한 번만 실행됨)
   const [shuffleAnimations] = useState(() =>
     Array.from({ length: 33 }).map(() => ({
@@ -43,27 +45,28 @@ export default function CategoryPage() {
     return () => clearTimeout(timer);
   }, [category, router]);
 
-  const handleCardClick = async (event: React.MouseEvent) => {
-    if (isShuffling || isSaving || isGeneratingAI) return;
+  useEffect(() => {
+    // 화면 크기 감지
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    
+    updateWindowWidth();
+    window.addEventListener('resize', updateWindowWidth);
+    return () => window.removeEventListener('resize', updateWindowWidth);
+  }, []);
 
-    // 이미 3장이 선택된 경우 무시
+  const handleCardClick = async (event: React.MouseEvent) => {
+    // 데스크톱에서만 즉시 선택 (터치가 아닌 경우)
+    if ('ontouchstart' in window) return; // 터치 디바이스는 터치 핸들러 사용
+    
+    if (isShuffling || isSaving || isGeneratingAI) return;
     if (selectedCards.length >= MAX_CARDS) return;
 
-    // 클릭한 카드의 인덱스 찾기 (덱 중앙 기준으로 계산)
+    // 클릭한 카드의 인덱스 찾기
     const target = event.currentTarget as HTMLElement;
-    const deckContainer = target.closest('.perspective-1000');
-    if (deckContainer) {
-      const cards = Array.from(
-        deckContainer.querySelectorAll('[data-card-index]')
-      );
-      const clickedCard = cards.find((card) => card.contains(target));
-      if (clickedCard) {
-        const index = parseInt(
-          clickedCard.getAttribute('data-card-index') || '16'
-        );
-        setClickedCardIndex(index);
-      }
-    }
+    const cardIndex = parseInt(target.getAttribute('data-card-index') || '16');
+    setClickedCardIndex(cardIndex);
 
     // 1. Randomly select a card (중복 방지)
     let pickedCard;
@@ -73,7 +76,6 @@ export default function CategoryPage() {
       pickedCard = TAROT_CARDS[randomIndex];
       attempts++;
       if (attempts > 100) {
-        // 무한 루프 방지
         toast.showError('카드를 선택할 수 없습니다. 다시 시도해주세요.');
         return;
       }
@@ -87,7 +89,97 @@ export default function CategoryPage() {
     setSelectedCards(newSelectedCards);
     setSelectedCardOrientations(newCardOrientations);
 
-    // 애니메이션 후 클릭 인덱스 리셋
+    setTimeout(() => setClickedCardIndex(null), 1000);
+
+    // 3장이 모두 선택되면 저장 및 AI 해석 생성
+    if (newSelectedCards.length === MAX_CARDS) {
+      setIsSaving(true);
+      setIsGeneratingAI(true);
+
+      try {
+        const result = await apiClient.saveReading({
+          category: slug,
+          cards: newSelectedCards,
+          cardOrientations: newCardOrientations,
+        });
+
+        const minWaitTime = 5000;
+        const startTime = Date.now();
+
+        try {
+          await apiClient.generateInterpretation(
+            result.id,
+            newSelectedCards,
+            slug,
+            newCardOrientations
+          );
+
+          const elapsedTime = Date.now() - startTime;
+          if (elapsedTime < minWaitTime) {
+            await new Promise((resolve) =>
+              setTimeout(resolve, minWaitTime - elapsedTime)
+            );
+          }
+
+          router.push(`/result/${result.id}`);
+        } catch (aiError) {
+          console.error('AI 해석 생성 실패:', aiError);
+        }
+
+        router.push(`/result/${result.id}`);
+      } catch (error) {
+        console.error('Failed to save reading:', error);
+        setIsSaving(false);
+        setIsGeneratingAI(false);
+        setSelectedCards([]);
+        setSelectedCardOrientations([]);
+        toast.showError(
+          '운세를 저장하는 중 오류가 발생했습니다. 다시 시도해주세요.'
+        );
+      }
+    }
+  };
+
+  const handleCardTouch = (event: React.TouchEvent, index: number) => {
+    if (isShuffling || isSaving || isGeneratingAI) return;
+    if (selectedCards.length >= MAX_CARDS) return;
+    
+    event.preventDefault();
+    setTouchedCardIndex(index);
+    setClickedCardIndex(index);
+  };
+
+  const handleConfirmCard = async () => {
+    if (touchedCardIndex === null) return;
+    if (isShuffling || isSaving || isGeneratingAI) return;
+    if (selectedCards.length >= MAX_CARDS) return;
+
+    // 1. Randomly select a card (중복 방지)
+    let pickedCard;
+    let attempts = 0;
+    do {
+      const randomIndex = Math.floor(Math.random() * TAROT_CARDS.length);
+      pickedCard = TAROT_CARDS[randomIndex];
+      attempts++;
+      if (attempts > 100) {
+        // 무한 루프 방지
+        toast.showError('카드를 선택할 수 없습니다. 다시 시도해주세요.');
+        setTouchedCardIndex(null);
+        setClickedCardIndex(null);
+        return;
+      }
+    } while (selectedCards.includes(pickedCard.id));
+
+    // 2. 30% 확률로 reversed 카드 선택
+    const isReversed = Math.random() < 0.3;
+
+    const newSelectedCards = [...selectedCards, pickedCard.id];
+    const newCardOrientations = [...selectedCardOrientations, isReversed];
+    setSelectedCards(newSelectedCards);
+    setSelectedCardOrientations(newCardOrientations);
+
+    // 터치 상태 리셋
+    setTouchedCardIndex(null);
     setTimeout(() => setClickedCardIndex(null), 1000);
 
     // 3장이 모두 선택되면 저장 및 AI 해석 생성
@@ -147,7 +239,7 @@ export default function CategoryPage() {
 
   return (
     <div
-      className={`min-h-screen w-full bg-gradient-to-b ${category.gradient} flex flex-col items-center justify-center p-4 overflow-hidden`}
+      className={`min-h-screen w-full bg-gradient-to-b ${category.gradient} flex flex-col items-center justify-center p-4 overflow-x-hidden overflow-y-auto`}
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -168,14 +260,46 @@ export default function CategoryPage() {
         </p>
       </motion.div>
 
-      <div className="relative w-full max-w-6xl flex items-center justify-center px-4">
+      <div className="relative w-full max-w-6xl flex items-center justify-center px-2 sm:px-4 overflow-visible">
         {/* Card Deck Animation */}
-        <div className="relative w-full md:w-[600px] h-80 md:h-96 flex items-center justify-center perspective-1000">
-          {Array.from({ length: 33 }).map((_, index) => (
+        <div className="relative w-full md:w-[600px] min-h-[400px] md:min-h-[500px] flex items-center justify-center perspective-1000 overflow-visible py-8 md:py-12">
+          {Array.from({ length: 33 }).map((_, index) => {
+            // 화면 크기에 따른 카드 크기 및 간격 조정
+            const isMobile = windowWidth > 0 && windowWidth < 768;
+            const isTablet = windowWidth >= 768 && windowWidth < 1024;
+            const cardWidth = isMobile ? 70 : isTablet ? 90 : 134;
+            const cardHeight = isMobile ? 105 : isTablet ? 126 : 224;
+            
+            // 모바일: 부채꼴을 세로로 회전, 데스크톱/태블릿: 가로 부채꼴 형태
+            let cardX, cardY, cardRotate;
+            if (isMobile) {
+              // 모바일: 부채꼴을 90도 회전하여 세로로 펼침
+              const cardSpacing = 11; // 10% 증가 (10 * 1.1 = 11)
+              const cardRotation = 1.2;
+              const cardXMultiplier = 1.5; // 좌우 아치 효과
+              const startIndex = index - 16;
+              cardX = Math.pow(Math.abs(startIndex) / 2, 1.5) * cardXMultiplier; // 좌우 아치 효과 (X와 Y 교환)
+              cardY = startIndex * cardSpacing; // 세로 간격
+              cardRotate = 90 + (startIndex * cardRotation); // 90도 회전 + 부채꼴 회전
+            } else {
+              // 데스크톱/태블릿: 가로 부채꼴 형태
+              const cardSpacing = isTablet ? 16 : 24;
+              const cardRotation = isTablet ? 1.8 : 2.2;
+              const cardYMultiplier = isTablet ? 2.5 : 4;
+              cardX = (index - 16) * cardSpacing;
+              cardY = -Math.pow(Math.abs(index - 16) / 2, 1.5) * cardYMultiplier;
+              cardRotate = -(index - 16) * cardRotation;
+            }
+            
+            return (
             <motion.div
               key={index}
               data-card-index={index}
-              className="absolute w-[134px] h-56 bg-slate-800 rounded-xl border-2 border-white/20 shadow-2xl cursor-pointer backface-hidden"
+              className="absolute bg-slate-800 rounded-xl border-2 border-white/20 shadow-2xl cursor-pointer backface-hidden"
+              style={{
+                width: `${cardWidth}px`,
+                height: `${cardHeight}px`,
+              }}
               initial={{
                 x: 0,
                 y: 0,
@@ -190,10 +314,19 @@ export default function CategoryPage() {
                       rotate: shuffleAnimations[index].rotate,
                       scale: 0.95,
                     }
+                  : touchedCardIndex === index
+                  ? {
+                      // 터치된 카드는 마우스 오버 효과처럼
+                      x: cardX,
+                      y: cardY - 30,
+                      rotate: cardRotate,
+                      scale: 1.1,
+                      zIndex: 100,
+                    }
                   : {
-                      x: (index - 16) * 24, // Spread out like a fan
-                      y: -Math.pow(Math.abs(index - 16) / 2, 1.5) * 4, // 둥근 아치 효과 (위쪽으로 펼쳐짐)
-                      rotate: -(index - 16) * 2.2, // 부채꼴 효과 (반대 방향)
+                      x: cardX,
+                      y: cardY,
+                      rotate: cardRotate,
                       scale: 1,
                     }
               }
@@ -201,10 +334,12 @@ export default function CategoryPage() {
                 !isShuffling &&
                 !isSaving &&
                 !isGeneratingAI &&
-                selectedCards.length < MAX_CARDS
+                selectedCards.length < MAX_CARDS &&
+                touchedCardIndex === null // 터치 모드가 아닐 때만
                   ? { y: -30, scale: 1.1, zIndex: 100 }
                   : {}
               }
+              onTouchStart={(e) => handleCardTouch(e, index)}
               onClick={
                 !isShuffling && !isSaving && !isGeneratingAI
                   ? handleCardClick
@@ -223,8 +358,37 @@ export default function CategoryPage() {
                 </div>
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
+
+        {/* 터치 확인 버튼 (모바일/태블릿) */}
+        {touchedCardIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-[200]"
+          >
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  setTouchedCardIndex(null);
+                  setClickedCardIndex(null);
+                }}
+                className="px-6 py-3 bg-white/20 text-white rounded-full font-bold hover:bg-white/30 transition-colors backdrop-blur-sm border border-white/30"
+              >
+                취소
+              </button>
+              <button
+                onClick={handleConfirmCard}
+                className="px-6 py-3 bg-pink-500 text-white rounded-full font-bold hover:bg-pink-600 transition-colors shadow-lg"
+              >
+                확인
+              </button>
+            </div>
+          </motion.div>
+        )}
 
         {/* 선택된 카드 표시 - fixed로 배치 (viewport 기준) */}
         {selectedCards.length > 0 && (
@@ -318,7 +482,7 @@ export default function CategoryPage() {
                         <div className="bg-black/70 text-white text-xs p-1.5 text-center shrink-0">
                           {card.nameKr}
                           {isReversed && (
-                            <span className="ml-1 text-yellow-300">[역위]</span>
+                            <span className="ml-1 text-yellow-300">[역방향]</span>
                           )}
                         </div>
                       </div>
