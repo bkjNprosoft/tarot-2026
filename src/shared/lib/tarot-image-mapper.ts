@@ -21,19 +21,19 @@ const MAJOR_CARD_MAP: Record<string, string> = {
   'the-hierophant': 'imgi_153_250px-RWS_Tarot_05_Hierophant.jpg',
   'the-lovers': 'imgi_154_250px-RWS_Tarot_06_Lovers.jpg',
   'the-chariot': 'imgi_155_250px-RWS_Tarot_07_Chariot.jpg',
-  'strength': 'imgi_156_250px-RWS_Tarot_08_Strength.jpg',
+  strength: 'imgi_156_250px-RWS_Tarot_08_Strength.jpg',
   'the-hermit': 'imgi_157_250px-RWS_Tarot_09_Hermit.jpg',
   'wheel-of-fortune': 'imgi_158_250px-RWS_Tarot_10_Wheel_of_Fortune.jpg',
-  'justice': 'imgi_159_250px-RWS_Tarot_11_Justice.jpg',
+  justice: 'imgi_159_250px-RWS_Tarot_11_Justice.jpg',
   'the-hanged-man': 'imgi_160_250px-RWS_Tarot_12_Hanged_Man.jpg',
-  'death': 'imgi_161_250px-RWS_Tarot_13_Death.jpg',
-  'temperance': 'imgi_162_250px-RWS_Tarot_14_Temperance.jpg',
+  death: 'imgi_161_250px-RWS_Tarot_13_Death.jpg',
+  temperance: 'imgi_162_250px-RWS_Tarot_14_Temperance.jpg',
   'the-devil': 'imgi_163_250px-RWS_Tarot_15_Devil.jpg',
   'the-tower': 'imgi_164_250px-RWS_Tarot_16_Tower.jpg',
   'the-star': 'imgi_165_250px-RWS_Tarot_17_Star.jpg',
   'the-moon': 'imgi_166_250px-RWS_Tarot_18_Moon.jpg',
   'the-sun': 'imgi_167_250px-RWS_Tarot_19_Sun.jpg',
-  'judgement': 'imgi_168_250px-RWS_Tarot_20_Judgement.jpg',
+  judgement: 'imgi_168_250px-RWS_Tarot_20_Judgement.jpg',
   'the-world': 'imgi_169_250px-RWS_Tarot_21_World.jpg',
 };
 
@@ -77,4 +77,3 @@ export function getCardImagePath(card: CardInfo): string {
   console.warn(`Card image path could not be determined for: ${card.id}`);
   return '/images/tarot/default.jpg';
 }
-

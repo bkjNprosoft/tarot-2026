@@ -12,6 +12,8 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@ai-sdk/google": "^2.0.44",
+    "@mastra/core": "1.0.0-beta.5",
     "@supabase/supabase-js": "^2.86.0",
     "clsx": "^2.1.1",
     "motion": "^12.23.25",

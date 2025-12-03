@@ -102,17 +102,18 @@ pnpm dev
 프로젝트 루트에 `.env.local` 파일을 생성하고 다음 환경 변수를 설정하세요:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+# Google Gemini API Key (필수)
+# Google AI Studio에서 발급: https://makersuite.google.com/app/apikey
+GOOGLE_GENERATIVE_AI_API_KEY=your_google_api_key_here
 ```
 
-### Supabase 설정
+### Google Gemini API 설정
 
-1. [Supabase](https://supabase.com/)에서 프로젝트 생성
-2. `supabase_schema.sql` 파일의 SQL을 실행하여 데이터베이스 스키마 생성
-3. 환경 변수에 프로젝트 URL과 Anon Key 입력
+1. [Google AI Studio](https://makersuite.google.com/app/apikey)에서 API 키 발급
+2. `.env.local` 파일에 `GOOGLE_GENERATIVE_AI_API_KEY` 환경 변수 설정
+3. API 키는 서버 사이드에서만 사용되므로 `NEXT_PUBLIC_` 접두사 불필요
 
-> **참고**: 환경 변수가 설정되지 않은 경우 빌드는 성공하지만, 실제 데이터베이스 연동은 작동하지 않습니다.
+> **참고**: 환경 변수가 설정되지 않은 경우 AI 해석 기능이 작동하지 않으며, 기본 해석만 표시됩니다.
 
 ## ✨ 주요 기능
 

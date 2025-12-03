@@ -5,12 +5,26 @@
 
 const STORAGE_KEY = 'tarot-readings';
 
+export interface AIInterpretation {
+  individualCards: Array<{
+    cardId: string;
+    cardName: string;
+    interpretation: string;
+  }>;
+  combination: {
+    summary: string;
+    detailed: string;
+  };
+}
+
 export interface StoredReading {
   id: string;
   category: string;
   cards: string[];
   userId?: string;
   createdAt: string; // ISO string format
+  aiInterpretation?: AIInterpretation;
+  interpretationGeneratedAt?: string; // ISO string format
 }
 
 /**

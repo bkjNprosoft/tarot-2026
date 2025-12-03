@@ -4,6 +4,7 @@ import {
   getReadingById,
   getReadingsByUserId,
   type StoredReading,
+  type AIInterpretation,
 } from './storage';
 
 export interface ReadingResult {
@@ -11,6 +12,8 @@ export interface ReadingResult {
   category: string;
   cards: string[]; // Card IDs
   createdAt: Date;
+  aiInterpretation?: AIInterpretation;
+  interpretationGeneratedAt?: Date;
 }
 
 export interface CreateReadingDto {
@@ -58,6 +61,10 @@ export const apiClient = {
         category: storedReading.category,
         cards: storedReading.cards,
         createdAt: new Date(storedReading.createdAt),
+        aiInterpretation: storedReading.aiInterpretation,
+        interpretationGeneratedAt: storedReading.interpretationGeneratedAt
+          ? new Date(storedReading.interpretationGeneratedAt)
+          : undefined,
       };
     } catch (error) {
       console.error('Error saving reading:', error);
@@ -89,6 +96,10 @@ export const apiClient = {
         category: r.category,
         cards: r.cards,
         createdAt: new Date(r.createdAt),
+        aiInterpretation: r.aiInterpretation,
+        interpretationGeneratedAt: r.interpretationGeneratedAt
+          ? new Date(r.interpretationGeneratedAt)
+          : undefined,
       }));
     } catch (error) {
       console.error('Error fetching history:', error);
@@ -112,9 +123,76 @@ export const apiClient = {
         category: reading.category,
         cards: reading.cards,
         createdAt: new Date(reading.createdAt),
+        aiInterpretation: reading.aiInterpretation,
+        interpretationGeneratedAt: reading.interpretationGeneratedAt
+          ? new Date(reading.interpretationGeneratedAt)
+          : undefined,
       };
     } catch (error) {
       console.error('Error fetching reading:', error);
+      return null;
+    }
+  },
+
+  /**
+   * AI 해석 생성 및 저장
+   */
+  async generateInterpretation(
+    readingId: string,
+    cardIds: string[],
+    category: string
+  ): Promise<AIInterpretation | null> {
+    try {
+      // API Route 호출 (타임아웃 35초)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 35000);
+
+      const response = await fetch('/api/tarot-interpretation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cardIds, category }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({
+          error: '해석 생성 실패',
+        }));
+        throw new Error(error.error || '해석 생성 실패');
+      }
+
+      const interpretation: AIInterpretation = await response.json();
+
+      // 저장된 읽기 데이터 업데이트
+      const reading = getReadingById(readingId);
+      if (reading) {
+        const updatedReading: StoredReading = {
+          ...reading,
+          aiInterpretation: interpretation,
+          interpretationGeneratedAt: new Date().toISOString(),
+        };
+
+        // 기존 읽기 제거 후 새로 추가
+        const allReadings = getAllReadings();
+        const filteredReadings = allReadings.filter((r) => r.id !== readingId);
+        filteredReadings.push(updatedReading);
+        localStorage.setItem(
+          'tarot-readings',
+          JSON.stringify(filteredReadings)
+        );
+      }
+
+      return interpretation;
+    } catch (error) {
+      console.error('Error generating interpretation:', error);
+      // 네트워크 에러나 타임아웃의 경우 null 반환 (기본 해석 사용)
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.error('AI 해석 생성 타임아웃');
+      }
       return null;
     }
   },
