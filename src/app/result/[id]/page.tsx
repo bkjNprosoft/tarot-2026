@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { apiClient, ReadingResult } from '@/shared/api';
-import { TAROT_CARDS, getCardById } from '@/entities/tarot-card';
+import { getCardById } from '@/entities/tarot-card';
 import { CATEGORIES } from '@/entities/category';
+import { useToast } from '@/shared/ui/toast';
 
 export default function ResultPage() {
   const params = useParams();
@@ -15,6 +16,7 @@ export default function ResultPage() {
   const [reading, setReading] = useState<ReadingResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     async function fetchReading() {
@@ -22,7 +24,7 @@ export default function ResultPage() {
       try {
         const data = await apiClient.getReading(id);
         if (!data) {
-          alert('운세 정보를 찾을 수 없습니다.');
+          toast.showError('운세 정보를 찾을 수 없습니다.');
           router.push('/');
           return;
         }
@@ -54,12 +56,13 @@ export default function ResultPage() {
         }
       } catch (error) {
         console.error(error);
-        alert('운세를 불러오는 중 오류가 발생했습니다.');
+        toast.showError('운세를 불러오는 중 오류가 발생했습니다.');
       } finally {
         setLoading(false);
       }
     }
     fetchReading();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, router]);
 
   if (loading) {

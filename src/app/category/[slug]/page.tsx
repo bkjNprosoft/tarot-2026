@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES } from '@/entities/category';
 import { TAROT_CARDS, getCardById } from '@/entities/tarot-card';
 import { apiClient } from '@/shared/api';
+import { useToast } from '@/shared/ui/toast';
 
 const MAX_CARDS = 3;
 
@@ -23,6 +24,7 @@ export default function CategoryPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [clickedCardIndex, setClickedCardIndex] = useState<number | null>(null);
+  const toast = useToast();
   // 각 카드의 셔플 애니메이션 랜덤 값을 초기값으로 생성 (한 번만 실행됨)
   const [shuffleAnimations] = useState(() =>
     Array.from({ length: 33 }).map(() => ({
@@ -72,7 +74,7 @@ export default function CategoryPage() {
       attempts++;
       if (attempts > 100) {
         // 무한 루프 방지
-        alert('카드를 선택할 수 없습니다. 다시 시도해주세요.');
+        toast.showError('카드를 선택할 수 없습니다. 다시 시도해주세요.');
         return;
       }
     } while (selectedCards.includes(pickedCard.id));
@@ -123,7 +125,9 @@ export default function CategoryPage() {
         setIsGeneratingAI(false);
         setSelectedCards([]);
         setSelectedCardOrientations([]);
-        alert('운세를 저장하는 중 오류가 발생했습니다. 다시 시도해주세요.');
+        toast.showError(
+          '운세를 저장하는 중 오류가 발생했습니다. 다시 시도해주세요.'
+        );
       }
     }
   };

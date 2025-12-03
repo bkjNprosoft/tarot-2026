@@ -6,11 +6,15 @@ import { motion } from 'framer-motion';
 import { apiClient, ReadingResult } from '@/shared/api';
 import { getCardById } from '@/entities/tarot-card';
 import { CATEGORIES } from '@/entities/category';
+import { useToast } from '@/shared/ui/toast';
+import { useModal } from '@/shared/ui/modal';
 
 export default function HistoryPage() {
   const router = useRouter();
   const [readings, setReadings] = useState<ReadingResult[]>([]);
   const [loading, setLoading] = useState(true);
+  const toast = useToast();
+  const modal = useModal();
 
   useEffect(() => {
     async function fetchHistory() {
@@ -25,6 +29,25 @@ export default function HistoryPage() {
     }
     fetchHistory();
   }, []);
+
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // 카드 클릭 이벤트 방지
+
+    modal.showConfirm(
+      '삭제 확인',
+      '이 운세 기록을 삭제하시겠습니까?',
+      async () => {
+        try {
+          await apiClient.deleteReading(id);
+          setReadings((prev) => prev.filter((r) => r.id !== id));
+          toast.showSuccess('운세 기록이 삭제되었습니다.');
+        } catch (error) {
+          console.error(error);
+          toast.showError('삭제 중 오류가 발생했습니다.');
+        }
+      }
+    );
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-4 md:p-8">
@@ -100,6 +123,14 @@ export default function HistoryPage() {
                       </span>
                     </h3>
                   </div>
+
+                  <button
+                    onClick={(e) => handleDelete(reading.id, e)}
+                    className="px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors text-sm font-medium flex-shrink-0 cursor-pointer"
+                    title="삭제"
+                  >
+                    삭제
+                  </button>
 
                   <div className="text-white/20 group-hover:text-white/60">
                     →

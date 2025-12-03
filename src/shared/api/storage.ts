@@ -84,6 +84,25 @@ export function getReadingsByUserId(userId: string): StoredReading[] {
 }
 
 /**
+ * ID로 특정 운세 기록 삭제
+ */
+export function deleteReading(id: string): void {
+  if (typeof window === 'undefined') {
+    console.warn('localStorage is not available on server side');
+    return;
+  }
+
+  try {
+    const readings = getAllReadings();
+    const filteredReadings = readings.filter((r) => r.id !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredReadings));
+  } catch (error) {
+    console.error('Error deleting from localStorage:', error);
+    throw error;
+  }
+}
+
+/**
  * 모든 운세 기록 삭제 (개발/테스트용)
  */
 export function clearAllReadings(): void {

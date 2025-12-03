@@ -3,6 +3,7 @@ import {
   saveReading as saveToStorage,
   getReadingById,
   getReadingsByUserId,
+  deleteReading as deleteFromStorage,
   type StoredReading,
   type AIInterpretation,
 } from './storage';
@@ -136,6 +137,18 @@ export const apiClient = {
     } catch (error) {
       console.error('Error fetching reading:', error);
       return null;
+    }
+  },
+
+  /**
+   * 운세 기록 삭제
+   */
+  async deleteReading(id: string): Promise<void> {
+    try {
+      deleteFromStorage(id);
+    } catch (error) {
+      console.error('Error deleting reading:', error);
+      throw error;
     }
   },
 
