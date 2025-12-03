@@ -21,6 +21,7 @@ export interface StoredReading {
   id: string;
   category: string;
   cards: string[];
+  cardOrientations?: boolean[]; // 각 카드의 reversed 여부 (true = reversed, false = upright)
   userId?: string;
   createdAt: string; // ISO string format
   aiInterpretation?: AIInterpretation;

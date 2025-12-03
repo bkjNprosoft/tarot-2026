@@ -24,3 +24,60 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+@keyframes border-flow {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.animate-border-flow {
+  position: relative;
+}
+
+.animate-border-flow::before,
+.animate-border-flow::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  background: var(--border-gradient);
+  background-size: 400%;
+  background-position: 0 0;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  z-index: 0;
+  border-radius: 0.75rem;
+  animation: border-flow 20s linear infinite;
+  will-change: background-position;
+  filter: saturate(0.7);
+}
+
+.animate-border-flow > * {
+  position: relative;
+  z-index: 1;
+}
+
+.animate-border-flow::after {
+  filter: blur(8px) saturate(0.7);
+  opacity: 0.7;
+}

@@ -35,7 +35,8 @@ export default function ResultPage() {
             const interpretation = await apiClient.generateInterpretation(
               id,
               data.cards,
-              data.category
+              data.category,
+              data.cardOrientations
             );
             if (interpretation) {
               // 업데이트된 데이터 다시 가져오기
@@ -75,6 +76,9 @@ export default function ResultPage() {
     .map((cardId) => getCardById(cardId))
     .filter((card): card is NonNullable<typeof card> => card !== null);
   const category = CATEGORIES.find((c) => c.id === reading.category);
+
+  // 각 카드의 reversed 여부 확인
+  const cardOrientations = reading.cardOrientations || cards.map(() => false);
 
   if (cards.length === 0 || !category) return null;
 
@@ -119,14 +123,21 @@ export default function ResultPage() {
                 transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="relative rounded-xl overflow-hidden shadow-2xl border-4 border-white/20 w-48 md:w-64">
+                <div className="relative rounded-xl overflow-hidden shadow-2xl border-4 border-white/20 w-32 md:w-44">
                   <img
                     src={card.image}
                     alt={card.nameKr}
-                    className="w-full h-auto object-cover"
+                    className={`w-full h-auto object-cover ${
+                      cardOrientations[index] ? 'rotate-180' : ''
+                    }`}
                   />
                 </div>
-                <h3 className="mt-4 text-xl font-bold">{card.nameKr}</h3>
+                <h3 className="mt-4 text-xl font-bold">
+                  {card.nameKr}
+                  {cardOrientations[index] && (
+                    <span className="ml-2 text-sm text-yellow-300">[역위]</span>
+                  )}
+                </h3>
                 <p className="text-sm opacity-80">{card.name}</p>
                 <div className="mt-2 flex flex-wrap gap-2 justify-center">
                   {card.keywords.slice(0, 3).map((keyword) => (
@@ -150,13 +161,15 @@ export default function ResultPage() {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="w-64 md:w-80 flex-shrink-0"
+              className="w-32 md:w-44 flex-shrink-0"
             >
               <div className="relative rounded-xl overflow-hidden shadow-2xl border-4 border-white/20">
                 <img
                   src={cards[0].image}
                   alt={cards[0].name}
-                  className="w-full h-auto object-cover"
+                  className={`w-full h-auto object-cover ${
+                    cardOrientations[0] ? 'rotate-180' : ''
+                  }`}
                 />
               </div>
               <div className="mt-4 flex flex-wrap gap-2 justify-center">
@@ -264,10 +277,19 @@ export default function ResultPage() {
             className="flex-grow bg-black/30 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-xl"
           >
             <div className="space-y-6">
+              {cardOrientations[0] && (
+                <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-3 mb-4">
+                  <p className="text-yellow-300 font-bold text-center">
+                    이 카드는 역위(Reversed)로 뽑혔습니다
+                  </p>
+                </div>
+              )}
               <section>
                 <h3 className="text-xl font-bold mb-2 text-yellow-300">총운</h3>
                 <p className="leading-relaxed text-lg">
-                  {cards[0].upright.general}
+                  {cardOrientations[0]
+                    ? cards[0].reversed.general
+                    : cards[0].upright.general}
                 </p>
               </section>
 
@@ -276,14 +298,20 @@ export default function ResultPage() {
                   <h3 className="text-lg font-bold mb-2 text-pink-300">
                     2026년 피해야 할 것
                   </h3>
-                  <p className="text-white/90">{cards[0].upright.avoid2026}</p>
+                  <p className="text-white/90">
+                    {cardOrientations[0]
+                      ? cards[0].reversed.avoid2026
+                      : cards[0].upright.avoid2026}
+                  </p>
                 </section>
                 <section>
                   <h3 className="text-lg font-bold mb-2 text-green-300">
                     2026년 끌어올 것
                   </h3>
                   <p className="text-white/90">
-                    {cards[0].upright.attract2026}
+                    {cardOrientations[0]
+                      ? cards[0].reversed.attract2026
+                      : cards[0].upright.attract2026}
                   </p>
                 </section>
               </div>
@@ -291,7 +319,11 @@ export default function ResultPage() {
               <section className="pt-4 border-t border-white/10">
                 <h3 className="text-xl font-bold mb-2 text-blue-300">조언</h3>
                 <p className="text-xl font-serif italic">
-                  "{cards[0].upright.advice}"
+                  "
+                  {cardOrientations[0]
+                    ? cards[0].reversed.advice
+                    : cards[0].upright.advice}
+                  "
                 </p>
               </section>
             </div>
@@ -301,13 +333,13 @@ export default function ResultPage() {
         <div className="flex justify-center gap-4">
           <button
             onClick={() => router.push('/')}
-            className="px-8 py-3 bg-white text-slate-900 rounded-full font-bold hover:bg-slate-100 transition-colors shadow-lg"
+            className="px-8 py-3 bg-white text-slate-900 rounded-full font-bold hover:bg-slate-100 transition-colors shadow-lg cursor-pointer"
           >
             다른 운세 보기
           </button>
           <button
             onClick={() => router.push('/history')}
-            className="px-8 py-3 bg-white/10 text-white rounded-full font-bold hover:bg-white/20 transition-colors backdrop-blur-sm border border-white/30"
+            className="px-8 py-3 bg-white/10 text-white rounded-full font-bold hover:bg-white/20 transition-colors backdrop-blur-sm border border-white/30 cursor-pointer"
           >
             기록 보기
           </button>

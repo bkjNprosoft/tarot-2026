@@ -23,19 +23,19 @@ export default function CategoryCard({ slug, config }: CategoryCardProps) {
           border border-white/20
           backdrop-blur-sm
           hover:shadow-3xl
-          h-[200px] flex flex-col
+          h-[216px] flex flex-col
         `}
       >
         {/* Icon */}
         <div className="text-6xl mb-4">{config.icon}</div>
 
         {/* Title */}
-        <h3 className="text-xl font-bold text-white mb-2 line-clamp-2">
+        <h3 className="text-sm md:text-base lg:text-lg xl:text-xl font-bold text-white mb-2 line-clamp-2">
           {config.title}
         </h3>
 
         {/* Description */}
-        <p className="text-white/80 text-sm">{config.description}</p>
+        <p className="text-white/80 text-sm grow">{config.description}</p>
 
         {/* Emoji decoration */}
         <div className="absolute -bottom-4 -right-4 text-8xl opacity-20">

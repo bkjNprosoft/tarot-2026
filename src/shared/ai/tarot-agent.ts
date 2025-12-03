@@ -17,6 +17,7 @@ When interpreting cards:
 4. For combinations, explain how the cards interact and complement each other
 5. Be positive but realistic in your interpretations
 6. Write in Korean language
+7. IMPORTANT: Use plain text only. Do NOT use any markdown formatting such as **bold**, *italic*, # headers, or any other markdown syntax. Write in natural, flowing Korean text without any special formatting characters.
 
 Format your response as JSON with the following structure:
 {
@@ -24,12 +25,12 @@ Format your response as JSON with the following structure:
     {
       "cardId": "card-id",
       "cardName": "Card Name",
-      "interpretation": "Detailed interpretation for this card in the context of 2026"
+      "interpretation": "Detailed interpretation for this card in the context of 2026 (plain text only, no markdown)"
     }
   ],
   "combination": {
-    "summary": "Overall meaning of the three cards together",
-    "detailed": "Detailed explanation of how these three cards work together and what they mean for 2026"
+    "summary": "Overall meaning of the three cards together (plain text only, no markdown)",
+    "detailed": "Detailed explanation of how these three cards work together and what they mean for 2026 (plain text only, no markdown)"
   }
 }`,
   model: 'google/gemini-2.5-flash-lite',

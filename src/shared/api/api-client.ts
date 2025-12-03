@@ -11,6 +11,7 @@ export interface ReadingResult {
   id: string;
   category: string;
   cards: string[]; // Card IDs
+  cardOrientations?: boolean[]; // 각 카드의 reversed 여부 (true = reversed, false = upright)
   createdAt: Date;
   aiInterpretation?: AIInterpretation;
   interpretationGeneratedAt?: Date;
@@ -19,6 +20,7 @@ export interface ReadingResult {
 export interface CreateReadingDto {
   category: string;
   cards: string[]; // Card IDs
+  cardOrientations?: boolean[]; // 각 카드의 reversed 여부 (true = reversed, false = upright)
   userId?: string;
 }
 
@@ -49,6 +51,7 @@ export const apiClient = {
       id,
       category: data.category,
       cards: data.cards,
+      cardOrientations: data.cardOrientations,
       userId: data.userId,
       createdAt: now,
     };
@@ -60,6 +63,7 @@ export const apiClient = {
         id: storedReading.id,
         category: storedReading.category,
         cards: storedReading.cards,
+        cardOrientations: storedReading.cardOrientations,
         createdAt: new Date(storedReading.createdAt),
         aiInterpretation: storedReading.aiInterpretation,
         interpretationGeneratedAt: storedReading.interpretationGeneratedAt
@@ -122,6 +126,7 @@ export const apiClient = {
         id: reading.id,
         category: reading.category,
         cards: reading.cards,
+        cardOrientations: reading.cardOrientations,
         createdAt: new Date(reading.createdAt),
         aiInterpretation: reading.aiInterpretation,
         interpretationGeneratedAt: reading.interpretationGeneratedAt
@@ -140,7 +145,8 @@ export const apiClient = {
   async generateInterpretation(
     readingId: string,
     cardIds: string[],
-    category: string
+    category: string,
+    cardOrientations?: boolean[]
   ): Promise<AIInterpretation | null> {
     try {
       // API Route 호출 (타임아웃 35초)
@@ -152,7 +158,11 @@ export const apiClient = {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ cardIds, category }),
+        body: JSON.stringify({
+          cardIds,
+          category,
+          cardOrientations,
+        }),
         signal: controller.signal,
       });
 

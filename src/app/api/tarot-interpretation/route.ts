@@ -6,6 +6,7 @@ import { CATEGORIES } from '@/entities/category';
 export interface InterpretationRequest {
   cardIds: string[];
   category: string;
+  cardOrientations?: boolean[]; // 각 카드의 reversed 여부 (true = reversed, false = upright)
 }
 
 export interface InterpretationResponse {
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body: InterpretationRequest = await request.json();
-    const { cardIds, category } = body;
+    const { cardIds, category, cardOrientations } = body;
 
     // 유효성 검사
     if (!cardIds || !Array.isArray(cardIds) || cardIds.length !== 3) {
@@ -71,37 +72,43 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 카테고리에 맞는 해석 가져오기
-    const interpretations = cards.map((card) => {
-      const categoryKey = category as keyof typeof card.upright;
-      const categoryInterpretation = card.upright[categoryKey];
+    // 카테고리에 맞는 해석 가져오기 (reversed 여부에 따라 선택)
+    const interpretations = cards.map((card, index) => {
+      const isReversed =
+        cardOrientations && cardOrientations[index] !== undefined
+          ? cardOrientations[index]
+          : false;
+      const orientation = isReversed ? card.reversed : card.upright;
+      const categoryKey = category as keyof typeof orientation;
+      const categoryInterpretation = orientation[categoryKey];
       return {
         cardId: card.id,
         cardName: card.nameKr,
         keywords: card.keywords,
+        isReversed,
         interpretation:
           (typeof categoryInterpretation === 'string'
             ? categoryInterpretation
-            : null) || card.upright.general,
+            : null) || orientation.general,
       };
     });
 
     // 프롬프트 생성
     const prompt = `다음 3장의 타로 카드에 대해 ${categoryInfo.title} 관점에서 해석해주세요:
 
-카드 1: ${cards[0].nameKr} (${cards[0].name})
+카드 1: ${cards[0].nameKr} (${cards[0].name})${interpretations[0].isReversed ? ' [역위]' : ' [정위]'}
 키워드: ${cards[0].keywords.join(', ')}
 기본 해석: ${interpretations[0].interpretation}
 
-카드 2: ${cards[1].nameKr} (${cards[1].name})
+카드 2: ${cards[1].nameKr} (${cards[1].name})${interpretations[1].isReversed ? ' [역위]' : ' [정위]'}
 키워드: ${cards[1].keywords.join(', ')}
 기본 해석: ${interpretations[1].interpretation}
 
-카드 3: ${cards[2].nameKr} (${cards[2].name})
+카드 3: ${cards[2].nameKr} (${cards[2].name})${interpretations[2].isReversed ? ' [역위]' : ' [정위]'}
 키워드: ${cards[2].keywords.join(', ')}
 기본 해석: ${interpretations[2].interpretation}
 
-위 3장의 카드를 ${categoryInfo.title} 관점에서 해석해주세요. 각 카드의 개별 의미와 3장이 함께 나타낼 때의 조합된 의미를 제공해주세요.`;
+위 3장의 카드를 ${categoryInfo.title} 관점에서 해석해주세요. 각 카드의 개별 의미와 3장이 함께 나타낼 때의 조합된 의미를 제공해주세요. [역위]로 표시된 카드는 역위(Reversed) 의미로 해석하고, [정위]로 표시된 카드는 정위(Upright) 의미로 해석해주세요.`;
 
     // AI 해석 생성 (타임아웃 30초)
     const timeoutPromise = new Promise<never>((_, reject) =>
