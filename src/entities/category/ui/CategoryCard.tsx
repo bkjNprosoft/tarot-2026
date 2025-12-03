@@ -30,7 +30,7 @@ export default function CategoryCard({ slug, config }: CategoryCardProps) {
         <div className="text-6xl mb-4">{config.icon}</div>
 
         {/* Title */}
-        <h3 className="text-sm md:text-base lg:text-lg xl:text-xl font-bold text-white mb-2 line-clamp-2">
+        <h3 className="text-[18px] sm:text-lg md:text-lg lg:text-base xl:text-lg font-bold text-white mb-2 leading-tight">
           {config.title}
         </h3>
 
