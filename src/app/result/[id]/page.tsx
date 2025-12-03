@@ -33,6 +33,9 @@ export default function ResultPage() {
         // AI 해석이 없으면 생성 시도
         if (!data.aiInterpretation && data.cards.length === 3) {
           setIsGeneratingAI(true);
+          const minWaitTime = 5000; // 최소 5초 대기 시간
+          const startTime = Date.now();
+          
           try {
             const interpretation = await apiClient.generateInterpretation(
               id,
@@ -40,6 +43,15 @@ export default function ResultPage() {
               data.category,
               data.cardOrientations
             );
+            
+            // 최소 대기 시간이 지나지 않았다면 남은 시간만큼 대기
+            const elapsedTime = Date.now() - startTime;
+            if (elapsedTime < minWaitTime) {
+              await new Promise((resolve) =>
+                setTimeout(resolve, minWaitTime - elapsedTime)
+              );
+            }
+            
             if (interpretation) {
               // 업데이트된 데이터 다시 가져오기
               const updatedData = await apiClient.getReading(id);

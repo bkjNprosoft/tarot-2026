@@ -105,6 +105,9 @@ export default function CategoryPage() {
         });
 
         // 3. AI 해석 생성
+        const minWaitTime = 5000; // 최소 5초 대기 시간
+        const startTime = Date.now();
+
         try {
           await apiClient.generateInterpretation(
             result.id,
@@ -112,6 +115,14 @@ export default function CategoryPage() {
             slug,
             newCardOrientations
           );
+
+          // 최소 대기 시간이 지나지 않았다면 남은 시간만큼 대기
+          const elapsedTime = Date.now() - startTime;
+          if (elapsedTime < minWaitTime) {
+            await new Promise((resolve) =>
+              setTimeout(resolve, minWaitTime - elapsedTime)
+            );
+          }
         } catch (aiError) {
           console.error('AI 해석 생성 실패:', aiError);
           // AI 해석 실패해도 기본 해석으로 진행
@@ -180,9 +191,9 @@ export default function CategoryPage() {
                       scale: 0.95,
                     }
                   : {
-                      x: (index - 16) * 21, // Spread out like a fan (33장 기준 중앙 16, 간격 5% 증가)
-                      y: Math.abs(index - 16) * 3.6, // Arch effect (20% 더 강하게)
-                      rotate: (index - 16) * 1.8, // 부채꼴 효과 (20% 더 강하게)
+                      x: (index - 16) * 24, // Spread out like a fan
+                      y: -Math.pow(Math.abs(index - 16) / 2, 1.5) * 4, // 둥근 아치 효과 (위쪽으로 펼쳐짐)
+                      rotate: -(index - 16) * 2.2, // 부채꼴 효과 (반대 방향)
                       scale: 1,
                     }
               }
