@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import {
   CATEGORY_CONFIG,
   ReadingCategory,
@@ -29,6 +30,16 @@ export default function HomePage() {
             <CategoryCard key={slug} slug={slug} config={config} />
           ))}
         </div>
+      </section>
+
+      {/* History Button */}
+      <section className="container mx-auto px-4 pb-10 flex justify-center">
+        <Link
+          href="/history"
+          className="px-8 py-3 bg-white/10 text-white rounded-full font-bold hover:bg-white/20 transition-colors backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-xl"
+        >
+          이전 타로 결과 보기
+        </Link>
       </section>
 
       {/* Footer */}
