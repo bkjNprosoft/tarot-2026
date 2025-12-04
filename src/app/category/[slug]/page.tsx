@@ -1,4 +1,4 @@
-import { ReadingCategory } from '@/entities/category/config/categories';
+import { ReadingCategory } from '@/lib/categories';
 import CategoryPageClient from './CategoryPageClient';
 
 // 정적 경로 생성 함수

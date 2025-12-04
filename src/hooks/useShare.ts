@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { toPng } from 'html-to-image';
-import { useToast } from '../toast';
+import { useToast } from './useToast';
 
 interface ShareOptions {
   title?: string;

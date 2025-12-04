@@ -3,11 +3,11 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { apiClient, ReadingResult } from '@/shared/api';
-import { getCardById } from '@/entities/tarot-card';
-import { CATEGORIES } from '@/entities/category';
-import { useToast } from '@/shared/ui/toast';
-import { ShareButton } from '@/shared/ui/share';
+import { apiClient, ReadingResult } from '@/lib/api';
+import { getCardById } from '@/lib/tarot-data';
+import { CATEGORIES } from '@/lib/categories';
+import { useToast } from '@/hooks/useToast';
+import { ShareButton } from '@/components/ui/ShareButton';
 
 export default function ResultPage() {
   const params = useParams();

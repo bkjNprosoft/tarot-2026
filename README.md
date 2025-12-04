@@ -25,22 +25,21 @@
 
 ## 🏗 아키텍처
 
-이 프로젝트는 **FSD (Feature-Sliced Design)** 아키텍처를 적용하고 있습니다.
+이 프로젝트는 **Next.js 표준 폴더 구조**를 따르고 있습니다.
 
-FSD는 확장 가능하고 유지보수가 용이한 프론트엔드 아키텍처 패턴으로, 다음과 같은 레이어 구조를 가집니다:
+Next.js의 App Router를 기반으로 하며, 다음과 같은 구조로 구성되어 있습니다:
 
 - **app**: Next.js App Router 페이지 및 레이아웃
-- **widgets**: 복합 UI 컴포넌트 (페이지 레벨)
-- **features**: 비즈니스 기능 단위
-- **entities**: 비즈니스 엔티티 (도메인 모델)
-- **shared**: 공유 모듈 (API 클라이언트, 유틸리티, UI 컴포넌트)
+- **components**: 재사용 가능한 UI 컴포넌트
+- **lib**: 유틸리티 함수, API 클라이언트, 라이브러리 코드
+- **hooks**: 커스텀 React 훅
 
-### FSD의 장점
+### 구조의 장점
 
-- **확장성**: 새로운 기능 추가 시 명확한 위치 파악
-- **재사용성**: 레이어 간 의존성 규칙으로 재사용성 향상
-- **유지보수성**: 코드 구조가 명확하여 유지보수 용이
-- **협업**: 팀원 간 코드 위치 예측 가능
+- **명확성**: Next.js 표준 구조로 직관적인 파일 위치 파악
+- **재사용성**: 컴포넌트와 훅의 명확한 분리로 재사용성 향상
+- **유지보수성**: 표준 구조로 유지보수 용이
+- **확장성**: 프로젝트 규모에 맞는 간단하고 확장 가능한 구조
 
 ## 📁 프로젝트 구조
 
@@ -49,30 +48,38 @@ src/
 ├── app/                    # Next.js App Router
 │   ├── page.tsx           # 홈 페이지
 │   ├── layout.tsx         # 루트 레이아웃
+│   ├── api/               # API 라우트
+│   │   └── tarot-interpretation/  # AI 해석 API
 │   ├── category/[slug]/   # 카테고리별 타로 뽑기 페이지
 │   ├── result/[id]/       # 타로 결과 페이지
 │   └── history/           # 운세 기록 페이지
 │
-├── entities/              # 비즈니스 엔티티
-│   ├── category/          # 카테고리 엔티티
-│   │   ├── config/        # 카테고리 설정
-│   │   ├── model/         # 카테고리 모델
-│   │   └── ui/            # 카테고리 UI 컴포넌트
-│   └── tarot-card/        # 타로 카드 엔티티
-│       ├── model/         # 타로 카드 데이터
-│       └── ui/            # 타로 카드 UI 컴포넌트
+├── components/            # UI 컴포넌트
+│   ├── category/          # 카테고리 관련 컴포넌트
+│   │   └── CategoryCard.tsx
+│   └── ui/                # 공통 UI 컴포넌트
+│       ├── Modal.tsx
+│       ├── Toast.tsx
+│       ├── ToastContainer.tsx
+│       └── ShareButton.tsx
 │
-├── features/              # 비즈니스 기능
-│   ├── card-selection/    # 카드 선택 기능
-│   └── reading-save/     # 운세 저장 기능
+├── lib/                   # 유틸리티 및 라이브러리
+│   ├── api/               # API 클라이언트 (localStorage)
+│   │   ├── api-client.ts
+│   │   └── storage.ts
+│   ├── ai/                # AI 관련 코드
+│   │   └── tarot-agent.ts
+│   ├── stores/            # 상태 관리 스토어
+│   │   ├── modalStore.ts
+│   │   └── toastStore.ts
+│   ├── categories.ts      # 카테고리 설정 및 타입
+│   ├── tarot-data.ts      # 타로 카드 데이터
+│   └── tarot-image-mapper.ts  # 이미지 매핑 유틸리티
 │
-├── shared/               # 공유 모듈
-│   ├── api/              # API 클라이언트 (localStorage)
-│   ├── config/           # 공유 설정
-│   ├── lib/              # 유틸리티 함수
-│   └── ui/               # 공유 UI 컴포넌트
-│
-└── widgets/              # 복합 UI 컴포넌트
+└── hooks/                 # 커스텀 React 훅
+    ├── useToast.ts
+    ├── useModal.ts
+    └── useShare.ts
 ```
 
 ## 🚀 시작하기
@@ -187,7 +194,7 @@ pnpm format:check
 
 - [Next.js 문서](https://nextjs.org/docs)
 - [Tailwind CSS 문서](https://tailwindcss.com/docs)
-- [FSD 아키텍처](https://feature-sliced.design/)
+- [React 문서](https://react.dev/)
 
 ## 📝 라이선스
 

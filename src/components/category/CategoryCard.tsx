@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'motion/react';
-import type { CategoryConfig } from '@/entities/category/config/categories';
+import type { CategoryConfig } from '@/lib/categories';
 
 interface CategoryCardProps {
   slug: string;

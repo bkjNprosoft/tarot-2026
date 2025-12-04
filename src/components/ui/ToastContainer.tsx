@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence } from 'framer-motion';
-import { useToastStore } from './toastStore';
+import { useToastStore } from '@/lib/stores/toastStore';
 import { Toast } from './Toast';
 
 export function ToastContainer() {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { tarotAgent } from '@/shared/ai/tarot-agent';
-import { getCardById } from '@/entities/tarot-card';
-import { CATEGORIES } from '@/entities/category';
+import { tarotAgent } from '@/lib/ai/tarot-agent';
+import { getCardById } from '@/lib/tarot-data';
+import { CATEGORIES } from '@/lib/categories';
 
 export interface InterpretationRequest {
   cardIds: string[];

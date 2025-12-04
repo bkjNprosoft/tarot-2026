@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useShare } from './useShare';
+import { useShare } from '@/hooks/useShare';
 
 interface ShareButtonProps {
   shareElementRef: React.RefObject<HTMLElement | null>;

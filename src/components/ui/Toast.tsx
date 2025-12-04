@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Toast as ToastType } from './toastStore';
+import { Toast as ToastType } from '@/lib/stores/toastStore';
 
 interface ToastProps {
   toast: ToastType;

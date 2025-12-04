@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CATEGORIES } from '@/entities/category';
-import { TAROT_CARDS, getCardById } from '@/entities/tarot-card';
-import { apiClient } from '@/shared/api';
-import { useToast } from '@/shared/ui/toast';
+import { CATEGORIES } from '@/lib/categories';
+import { TAROT_CARDS, getCardById } from '@/lib/tarot-data';
+import { apiClient } from '@/lib/api';
+import { useToast } from '@/hooks/useToast';
 
 const MAX_CARDS = 3;
 const DECK_CARD_COUNT = 26;

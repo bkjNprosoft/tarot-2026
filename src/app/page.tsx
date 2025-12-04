@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { CATEGORY_CONFIG } from '@/entities/category/config/categories';
-import CategoryCard from '@/entities/category/ui/CategoryCard';
+import { CATEGORY_CONFIG } from '@/lib/categories';
+import CategoryCard from '@/components/category/CategoryCard';
 
 export default function HomePage() {
   const categories = Object.entries(CATEGORY_CONFIG);

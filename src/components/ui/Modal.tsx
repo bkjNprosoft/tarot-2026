@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useModalStore } from './modalStore';
+import { useModalStore } from '@/lib/stores/modalStore';
 
 export function Modal() {
   const {
