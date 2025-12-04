@@ -280,7 +280,7 @@ export default function CategoryPage() {
             if (isMobile) {
               // 모바일: 세로 부채꼴 형태 (90도 회전하여 세로로 배치)
               // x, y 좌표를 교환하여 세로 방향으로 배치
-              cardX = Math.pow(Math.abs(startIndex) / 4, 1.5) * -10; // 좌우 호 효과
+              cardX = Math.pow(Math.abs(startIndex) / 4, 1.5) * -10; // 좌우 효과
               cardY = startIndex * cardSpacing; // 세로 간격
               cardRotate = 90; // 90도 회전하여 세로로
             } else {
@@ -322,7 +322,6 @@ export default function CategoryPage() {
                           y: cardY - 30,
                           rotate: cardRotate,
                           scale: 1.1,
-                          zIndex: 100,
                         }
                       : {
                           x: cardX,
@@ -337,7 +336,7 @@ export default function CategoryPage() {
                   !isGeneratingAI &&
                   selectedCards.length < MAX_CARDS &&
                   touchedCardIndex === null // 터치 모드가 아닐 때만
-                    ? { y: -30, scale: 1.1, zIndex: 100 }
+                    ? { y: cardY - 50, scale: 1.1 }
                     : {}
                 }
                 onTouchStart={(e) => handleCardTouch(e, index)}
