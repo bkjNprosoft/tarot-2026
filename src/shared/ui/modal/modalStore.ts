@@ -45,4 +45,3 @@ export const useModalStore = create<ModalStore>((set) => ({
     set(initialState);
   },
 }));
-

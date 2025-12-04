@@ -50,7 +50,7 @@ export default function CategoryPage() {
     const updateWindowWidth = () => {
       setWindowWidth(window.innerWidth);
     };
-    
+
     updateWindowWidth();
     window.addEventListener('resize', updateWindowWidth);
     return () => window.removeEventListener('resize', updateWindowWidth);
@@ -59,7 +59,7 @@ export default function CategoryPage() {
   const handleCardClick = async (event: React.MouseEvent) => {
     // 데스크톱에서만 즉시 선택 (터치가 아닌 경우)
     if ('ontouchstart' in window) return; // 터치 디바이스는 터치 핸들러 사용
-    
+
     if (isShuffling || isSaving || isGeneratingAI) return;
     if (selectedCards.length >= MAX_CARDS) return;
 
@@ -143,7 +143,7 @@ export default function CategoryPage() {
   const handleCardTouch = (event: React.TouchEvent, index: number) => {
     if (isShuffling || isSaving || isGeneratingAI) return;
     if (selectedCards.length >= MAX_CARDS) return;
-    
+
     event.preventDefault();
     setTouchedCardIndex(index);
     setClickedCardIndex(index);
@@ -244,7 +244,7 @@ export default function CategoryPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-12 z-10"
+        className={`text-center mb-12 z-10 -mt-5`}
       >
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
           {category.title}
@@ -262,102 +262,103 @@ export default function CategoryPage() {
 
       <div className="relative w-full max-w-6xl flex items-center justify-center px-2 sm:px-4 overflow-visible">
         {/* Card Deck Animation */}
-        <div className="relative w-full md:w-[600px] min-h-[400px] md:min-h-[500px] flex items-center justify-center perspective-1000 overflow-visible py-8 md:py-12">
+        <div className="relative w-full md:w-[600px] min-h-[400px] md:min-h-[500px] flex items-center justify-center overflow-visible py-8 md:py-12">
           {Array.from({ length: 33 }).map((_, index) => {
             // 화면 크기에 따른 카드 크기 및 간격 조정
             const isMobile = windowWidth > 0 && windowWidth < 768;
             const isTablet = windowWidth >= 768 && windowWidth < 1024;
             const cardWidth = isMobile ? 70 : isTablet ? 90 : 134;
             const cardHeight = isMobile ? 105 : isTablet ? 126 : 224;
-            
-            // 모바일: 부채꼴을 세로로 회전, 데스크톱/태블릿: 가로 부채꼴 형태
+
+            // 모든 디바이스에서 바닥에 눕혀진 완전 평면 부채꼴 형태로 배치 (x, y만 사용)
             let cardX, cardY, cardRotate;
+            const startIndex = index - 16;
+
+            // 화면 크기에 따른 간격 조정
+            const cardSpacing = isMobile ? 10 : isTablet ? 12 : 18;
+
             if (isMobile) {
-              // 모바일: 부채꼴을 90도 회전하여 세로로 펼침
-              const cardSpacing = 11; // 10% 증가 (10 * 1.1 = 11)
-              const cardRotation = 1.2;
-              const cardXMultiplier = 1.5; // 좌우 아치 효과
-              const startIndex = index - 16;
-              cardX = Math.pow(Math.abs(startIndex) / 2, 1.5) * cardXMultiplier; // 좌우 아치 효과 (X와 Y 교환)
+              // 모바일: 세로 부채꼴 형태 (90도 회전하여 세로로 배치)
+              // x, y 좌표를 교환하여 세로 방향으로 배치
+              cardX = Math.pow(Math.abs(startIndex) / 4, 1.5) * -10; // 좌우 호 효과
               cardY = startIndex * cardSpacing; // 세로 간격
-              cardRotate = 90 + (startIndex * cardRotation); // 90도 회전 + 부채꼴 회전
+              cardRotate = 90; // 90도 회전하여 세로로
             } else {
               // 데스크톱/태블릿: 가로 부채꼴 형태
-              const cardSpacing = isTablet ? 16 : 24;
-              const cardRotation = isTablet ? 1.8 : 2.2;
-              const cardYMultiplier = isTablet ? 2.5 : 4;
-              cardX = (index - 16) * cardSpacing;
-              cardY = -Math.pow(Math.abs(index - 16) / 2, 1.5) * cardYMultiplier;
-              cardRotate = -(index - 16) * cardRotation;
+              cardX = startIndex * cardSpacing * 1.5;
+              cardY =
+                Math.pow(Math.abs(startIndex) / 4, 1.5) *
+                (isTablet ? -10 : -10);
+              cardRotate = 0; // 회전 없음 (완전 평면)
             }
-            
-            return (
-            <motion.div
-              key={index}
-              data-card-index={index}
-              className="absolute bg-slate-800 rounded-xl border-2 border-white/20 shadow-2xl cursor-pointer backface-hidden"
-              style={{
-                width: `${cardWidth}px`,
-                height: `${cardHeight}px`,
-              }}
-              initial={{
-                x: 0,
-                y: 0,
-                rotate: 0,
-                scale: 1,
-              }}
-              animate={
-                isShuffling
-                  ? {
-                      x: shuffleAnimations[index].x,
-                      y: shuffleAnimations[index].y,
-                      rotate: shuffleAnimations[index].rotate,
-                      scale: 0.95,
-                    }
-                  : touchedCardIndex === index
-                  ? {
-                      // 터치된 카드는 마우스 오버 효과처럼
-                      x: cardX,
-                      y: cardY - 30,
-                      rotate: cardRotate,
-                      scale: 1.1,
-                      zIndex: 100,
-                    }
-                  : {
-                      x: cardX,
-                      y: cardY,
-                      rotate: cardRotate,
-                      scale: 1,
-                    }
-              }
-              whileHover={
-                !isShuffling &&
-                !isSaving &&
-                !isGeneratingAI &&
-                selectedCards.length < MAX_CARDS &&
-                touchedCardIndex === null // 터치 모드가 아닐 때만
-                  ? { y: -30, scale: 1.1, zIndex: 100 }
-                  : {}
-              }
-              onTouchStart={(e) => handleCardTouch(e, index)}
-              onClick={
-                !isShuffling && !isSaving && !isGeneratingAI
-                  ? handleCardClick
-                  : undefined
-              }
-              transition={{ duration: 0.5 }}
-            >
-              {/* Card Back Design */}
-              <div className="w-full h-full bg-[url('/images/card-back.webp')] bg-cover bg-center rounded-xl opacity-90 hover:opacity-100 transition-opacity" />
 
-              {/* Decorative Border */}
-              <div className="absolute inset-2 border border-white/30 rounded-lg" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-8 h-8 rounded-full border-2 border-white/20 flex items-center justify-center">
-                  <span className="text-white/40 text-sm">★</span>
+            return (
+              <motion.div
+                key={index}
+                data-card-index={index}
+                className="absolute bg-slate-800 rounded-xl border-2 border-white/20 shadow-lg cursor-pointer"
+                style={{
+                  width: `${cardWidth}px`,
+                  height: `${cardHeight}px`,
+                }}
+                initial={{
+                  x: 0,
+                  y: 0,
+                  rotate: 0,
+                  scale: 1,
+                }}
+                animate={
+                  isShuffling
+                    ? {
+                        x: shuffleAnimations[index].x,
+                        y: shuffleAnimations[index].y,
+                        rotate: shuffleAnimations[index].rotate,
+                        scale: 0.95,
+                      }
+                    : touchedCardIndex === index
+                      ? {
+                          // 터치된 카드는 마우스 오버 효과처럼
+                          x: cardX,
+                          y: cardY - 30,
+                          rotate: cardRotate,
+                          scale: 1.1,
+                          zIndex: 100,
+                        }
+                      : {
+                          x: cardX,
+                          y: cardY,
+                          rotate: cardRotate,
+                          scale: 1,
+                        }
+                }
+                whileHover={
+                  !isShuffling &&
+                  !isSaving &&
+                  !isGeneratingAI &&
+                  selectedCards.length < MAX_CARDS &&
+                  touchedCardIndex === null // 터치 모드가 아닐 때만
+                    ? { y: -30, scale: 1.1, zIndex: 100 }
+                    : {}
+                }
+                onTouchStart={(e) => handleCardTouch(e, index)}
+                onClick={
+                  !isShuffling && !isSaving && !isGeneratingAI
+                    ? handleCardClick
+                    : undefined
+                }
+                transition={{ duration: 0.5 }}
+              >
+                {/* Card Back Design */}
+                <div className="w-full h-full bg-[url('/images/card-back.webp')] bg-cover bg-center rounded-xl opacity-90 hover:opacity-100 transition-opacity" />
+
+                {/* Decorative Border */}
+                <div className="absolute inset-2 border border-white/30 rounded-lg" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full border-2 border-white/20 flex items-center justify-center">
+                    <span className="text-white/40 text-sm">★</span>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
             );
           })}
         </div>
@@ -395,12 +396,19 @@ export default function CategoryPage() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="fixed top-[5vh] right-4 md:right-8 flex flex-col items-end gap-3 z-[60]"
+            className={`fixed ${
+              windowWidth > 0 && windowWidth <= 768
+                ? 'top-1/2 -translate-y-1/2 right-4 flex flex-col items-end'
+                : 'top-[5vh] right-4 md:right-8 flex flex-col items-end'
+            } gap-3 z-[60]`}
           >
-            <h3 className="text-white/90 text-lg font-bold mb-2 text-right">
-              선택된 카드
-            </h3>
-            <div className="flex flex-col gap-3">
+            <div
+              className={
+                windowWidth > 0 && windowWidth <= 768
+                  ? 'flex flex-col gap-3'
+                  : 'flex flex-col gap-3'
+              }
+            >
               <AnimatePresence>
                 {selectedCards.map((cardId, index) => {
                   const card = getCardById(cardId);
@@ -421,20 +429,33 @@ export default function CategoryPage() {
                       ? window.innerHeight / 2 - 112
                       : 0; // 카드 높이의 절반
 
-                  // 선택된 카드 위치 (우측 상단)
-                  const selectedCardX =
-                    typeof window !== 'undefined' ? window.innerWidth - 120 : 0; // right-4 = 16px, 카드 너비 96px
-                  const selectedCardY =
+                  // 선택된 카드 위치
+                  const isMobile = windowWidth > 0 && windowWidth <= 768;
+
+                  // 모바일: 컨테이너 세로 중앙 우측 위치
+                  const mobileContainerX =
+                    typeof window !== 'undefined' ? window.innerWidth - 80 : 0;
+                  const mobileContainerY =
+                    typeof window !== 'undefined' ? window.innerHeight / 2 : 0;
+
+                  // 데스크톱: 우측 상단 위치
+                  const desktopX =
+                    typeof window !== 'undefined' ? window.innerWidth - 120 : 0;
+                  const desktopY =
                     typeof window !== 'undefined'
                       ? window.innerHeight * 0.2 + index * 160
-                      : 0; // top-[20vh] + gap
+                      : 0;
 
                   return (
                     <motion.div
                       key={cardId}
                       initial={{
-                        x: deckCenterX - selectedCardX,
-                        y: deckCenterY - selectedCardY,
+                        x: isMobile
+                          ? deckCenterX - mobileContainerX // 모바일: 덱 중앙에서 컨테이너 중앙으로
+                          : deckCenterX - desktopX, // 데스크톱: 덱 중앙에서 우측 상단으로
+                        y: isMobile
+                          ? deckCenterY - mobileContainerY // 모바일: 덱 중앙에서 컨테이너 상단으로
+                          : deckCenterY - desktopY, // 데스크톱: 덱 중앙에서 우측 상단으로
                         scale: 1.2,
                         rotate:
                           clickedCardIndex !== null
@@ -443,7 +464,7 @@ export default function CategoryPage() {
                         opacity: 0,
                       }}
                       animate={{
-                        x: 0,
+                        x: 0, // flex 컨테이너가 배치하므로 0
                         y: 0,
                         scale: 1,
                         rotate: 0,
@@ -459,7 +480,9 @@ export default function CategoryPage() {
                         damping: 25,
                         delay: index * 0.1,
                       }}
-                      className="w-24 rounded-xl shadow-2xl relative animate-border-flow"
+                      className={`${
+                        isMobile ? 'w-[72px]' : 'w-24'
+                      } rounded-xl shadow-2xl relative animate-border-flow`}
                       style={
                         {
                           aspectRatio: '2/3.5',
@@ -479,10 +502,10 @@ export default function CategoryPage() {
                             }`}
                           />
                         </div>
-                        <div className="bg-black/70 text-white text-xs p-1.5 text-center shrink-0">
-                          {card.nameKr}
+                        <div className="bg-black/70 text-white text-xs p-1.5 text-center shrink-0 flex flex-col">
+                          <span>{card.nameKr}</span>
                           {isReversed && (
-                            <span className="ml-1 text-yellow-300">[역방향]</span>
+                            <span className="text-yellow-300">[역방향]</span>
                           )}
                         </div>
                       </div>
@@ -491,11 +514,6 @@ export default function CategoryPage() {
                 })}
               </AnimatePresence>
             </div>
-            {selectedCards.length < MAX_CARDS && (
-              <div className="text-white/80 text-sm mt-2 text-right">
-                {selectedCards.length}/{MAX_CARDS}장 선택됨
-              </div>
-            )}
           </motion.div>
         )}
       </div>

@@ -37,7 +37,7 @@ export default function ResultPage() {
           setIsGeneratingAI(true);
           const minWaitTime = 5000; // 최소 5초 대기 시간
           const startTime = Date.now();
-          
+
           try {
             const interpretation = await apiClient.generateInterpretation(
               id,
@@ -45,7 +45,7 @@ export default function ResultPage() {
               data.category,
               data.cardOrientations
             );
-            
+
             // 최소 대기 시간이 지나지 않았다면 남은 시간만큼 대기
             const elapsedTime = Date.now() - startTime;
             if (elapsedTime < minWaitTime) {
@@ -53,7 +53,7 @@ export default function ResultPage() {
                 setTimeout(resolve, minWaitTime - elapsedTime)
               );
             }
-            
+
             if (interpretation) {
               // 업데이트된 데이터 다시 가져오기
               const updatedData = await apiClient.getReading(id);
@@ -104,11 +104,14 @@ export default function ResultPage() {
 
   // 공유용 정보 준비
   const shareTitle = `${category.title} 운세 - 2026 신년운세 타로`;
-  const shareText = cards.length === 3
-    ? `${cards.map((c) => c.nameKr).join(', ')} - ${category.title} 운세`
-    : `${cards[0]?.nameKr} - ${category.title} 운세`;
+  const shareText =
+    cards.length === 3
+      ? `${cards.map((c) => c.nameKr).join(', ')} - ${category.title} 운세`
+      : `${cards[0]?.nameKr} - ${category.title} 운세`;
   const shareUrl =
-    typeof window !== 'undefined' ? `${window.location.origin}/result/${id}` : '';
+    typeof window !== 'undefined'
+      ? `${window.location.origin}/result/${id}`
+      : '';
 
   return (
     <div
@@ -149,7 +152,7 @@ export default function ResultPage() {
                 transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="relative rounded-xl overflow-hidden shadow-2xl border-4 border-white/20 w-32 md:w-44">
+                <div className="relative rounded-xl overflow-hidden shadow-2xl border-4 border-white/20 w-32 md:w-44 mx-auto">
                   <img
                     src={card.image}
                     alt={card.nameKr}
@@ -161,7 +164,9 @@ export default function ResultPage() {
                 <h3 className="mt-4 text-xl font-bold">
                   {card.nameKr}
                   {cardOrientations[index] && (
-                    <span className="ml-2 text-sm text-yellow-300">[역방향]</span>
+                    <span className="ml-2 text-sm text-yellow-300">
+                      [역방향]
+                    </span>
                   )}
                 </h3>
                 <p className="text-sm opacity-80">{card.name}</p>

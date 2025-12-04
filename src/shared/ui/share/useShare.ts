@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { toPng, toJpeg } from 'html-to-image';
+import { toPng } from 'html-to-image';
 import { useToast } from '../toast';
 
 interface ShareOptions {
@@ -11,6 +11,15 @@ interface ShareOptions {
 export function useShare() {
   const toast = useToast();
 
+  const downloadImage = useCallback((dataUrl: string, filename: string) => {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }, []);
+
   const shareImage = useCallback(
     async (element: HTMLElement, options?: ShareOptions) => {
       try {
@@ -21,7 +30,7 @@ export function useShare() {
 
         // 요소의 실제 크기 계산
         const rect = element.getBoundingClientRect();
-        
+
         // 실제 콘텐츠 크기 계산 (모든 가능한 값 중 최대값 사용)
         const contentWidth = Math.max(
           element.scrollWidth || 0,
@@ -48,11 +57,14 @@ export function useShare() {
         const dataUrl = await toPng(element, {
           quality: 1,
           pixelRatio: 2, // 고해상도
-          backgroundColor: bgImage && bgImage !== 'none' 
-            ? undefined // 그라데이션은 backgroundColor로 설정 불가, 요소에 포함됨
-            : (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent'
-              ? bgColor
-              : undefined), // 기본값도 undefined로 설정하여 요소의 배경 그대로 사용
+          backgroundColor:
+            bgImage && bgImage !== 'none'
+              ? undefined // 그라데이션은 backgroundColor로 설정 불가, 요소에 포함됨
+              : bgColor &&
+                  bgColor !== 'rgba(0, 0, 0, 0)' &&
+                  bgColor !== 'transparent'
+                ? bgColor
+                : undefined, // 기본값도 undefined로 설정하여 요소의 배경 그대로 사용
           width: contentWidth,
           height: contentHeight,
           cacheBust: true,
@@ -85,9 +97,12 @@ export function useShare() {
             });
             toast.showSuccess('공유되었습니다!');
             return;
-          } catch (shareError: any) {
+          } catch (shareError: unknown) {
             // 사용자가 공유를 취소한 경우
-            if (shareError.name === 'AbortError') {
+            if (
+              shareError instanceof Error &&
+              shareError.name === 'AbortError'
+            ) {
               return;
             }
             // 파일 공유가 실패하면 텍스트만 공유 시도
@@ -101,8 +116,11 @@ export function useShare() {
               downloadImage(dataUrl, 'tarot-result.png');
               toast.showSuccess('공유되었습니다!');
               return;
-            } catch (textShareError: any) {
-              if (textShareError.name !== 'AbortError') {
+            } catch (textShareError: unknown) {
+              if (
+                textShareError instanceof Error &&
+                textShareError.name !== 'AbortError'
+              ) {
                 throw textShareError;
               }
               return;
@@ -118,17 +136,8 @@ export function useShare() {
         toast.showError('이미지 공유 중 오류가 발생했습니다.');
       }
     },
-    [toast]
+    [toast, downloadImage]
   );
-
-  const downloadImage = useCallback((dataUrl: string, filename: string) => {
-    const link = document.createElement('a');
-    link.download = filename;
-    link.href = dataUrl;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }, []);
 
   return {
     shareImage,
