@@ -5,15 +5,23 @@
 
 const STORAGE_KEY = 'tarot-readings';
 
+export interface MusicRecommendation {
+  title: string;
+  youtubeSearchUrl: string;
+  type: 'korean' | 'global';
+}
+
 export interface AIInterpretation {
   individualCards: Array<{
     cardId: string;
     cardName: string;
     interpretation: string;
+    musicRecommendations?: MusicRecommendation[];
   }>;
   combination: {
     summary: string;
     detailed: string;
+    musicRecommendations?: MusicRecommendation[];
   };
 }
 
