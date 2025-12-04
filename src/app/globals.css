@@ -85,3 +85,61 @@ button {
   filter: blur(8px) saturate(0.7);
   opacity: 0.7;
 }
+
+@keyframes border-spin {
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-border-glow {
+  position: relative;
+}
+
+.animate-border-glow .card-wrapper {
+  position: relative;
+  height: 100%;
+}
+
+.animate-border-glow .card-wrapper::before {
+  content: '';
+  position: absolute;
+  left: -25%;
+  top: -25%;
+  height: 150%;
+  width: 150%;
+  background: conic-gradient(
+    var(--border-color) 0deg,
+    var(--border-color) 0deg,
+    transparent 40deg
+  );
+  animation: border-spin 5s linear infinite;
+  z-index: 0;
+  border-radius: 0.75rem;
+  filter: blur(12px);
+  opacity: 1;
+}
+
+.animate-border-glow .card-wrapper::after {
+  content: '';
+  position: absolute;
+  left: -25%;
+  top: -25%;
+  height: 150%;
+  width: 150%;
+  background: conic-gradient(
+    var(--border-color) 0deg,
+    var(--border-color) 0deg,
+    transparent 40deg
+  );
+  animation: border-spin 5s linear infinite;
+  z-index: 0;
+  border-radius: 0.75rem;
+  opacity: 1;
+  filter: blur(4px);
+}
+
+.animate-border-glow .inner {
+  position: relative;
+  z-index: 1;
+}

@@ -16,6 +16,6 @@ interface CategoryPageProps {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
-  
+
   return <CategoryPageClient slug={slug} />;
 }

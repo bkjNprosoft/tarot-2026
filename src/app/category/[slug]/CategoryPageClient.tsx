@@ -514,31 +514,32 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
                           : isMobileOrTablet
                             ? 'w-[72px]'
                             : 'w-24'
-                      } rounded-xl shadow-2xl relative animate-border-flow`}
+                      } overflow-hidden p-[1.5px] relative rounded-xl animate-border-glow`}
                       style={
                         {
                           aspectRatio: '2/3.5',
                           borderRadius: '0.75rem',
-                          '--border-gradient':
-                            'linear-gradient(45deg, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000)',
+                          '--border-color': category?.borderColor || '#4eff0d',
                         } as React.CSSProperties
                       }
                     >
-                      <div className="relative w-full h-full rounded-xl overflow-hidden bg-slate-800 flex flex-col">
-                        <div className="flex-1 flex items-center justify-center overflow-hidden p-1">
-                          <img
-                            src={card.image}
-                            alt={card.nameKr}
-                            className={`max-w-full max-h-full object-contain ${
-                              isReversed ? 'rotate-180' : ''
-                            }`}
-                          />
-                        </div>
-                        <div className="bg-black/70 text-white text-xs p-1.5 text-center shrink-0 flex flex-col">
-                          <span>{card.nameKr}</span>
-                          {isReversed && (
-                            <span className="text-yellow-300">[역방향]</span>
-                          )}
+                      <div className="card-wrapper h-full">
+                        <div className="relative w-full h-full rounded-xl overflow-hidden bg-slate-800 flex flex-col inner">
+                          <div className="flex-1 flex items-center justify-center overflow-hidden p-1">
+                            <img
+                              src={card.image}
+                              alt={card.nameKr}
+                              className={`max-w-full max-h-full object-contain ${
+                                isReversed ? 'rotate-180' : ''
+                              }`}
+                            />
+                          </div>
+                          <div className="bg-black/70 text-white text-xs p-1.5 text-center shrink-0 flex flex-col">
+                            <span>{card.nameKr}</span>
+                            {isReversed && (
+                              <span className="text-yellow-300">[역방향]</span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </motion.div>
@@ -569,4 +570,3 @@ export default function CategoryPageClient({ slug }: CategoryPageClientProps) {
     </div>
   );
 }
-
