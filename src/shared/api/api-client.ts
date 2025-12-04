@@ -38,7 +38,7 @@ function generateId(): string {
 
 /**
  * localStorage 기반 API 클라이언트
- * Supabase와 동일한 인터페이스를 제공하여 기존 코드와 호환성 유지
+ * 운세 데이터를 브라우저 localStorage에 저장/조회하는 기능 제공
  */
 export const apiClient = {
   /**

@@ -10,7 +10,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="py-20 px-4 text-center text-white">
         <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200">
-          🎴 2026 신년운세 타로
+          2026 신년운세 타로
         </h1>
         <p className="text-xl md:text-2xl opacity-90 mt-6">
           새해를 맞아 타로로 당신의 2026년을 미리 만나보세요

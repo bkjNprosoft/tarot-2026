@@ -1,6 +1,6 @@
-# 🎴 2026 신년운세 타로
+# 2026 신년운세 타로
 
-2026년 새해를 맞아 타로로 운세를 확인할 수 있는 웹 서비스입니다. Next.js와 Supabase를 활용하여 비용 효율적으로 구축되었습니다.
+2026년 새해를 맞아 타로로 운세를 확인할 수 있는 웹 서비스입니다. Next.js와 localStorage를 활용하여 구축되었습니다.
 
 ## 📋 목차
 
@@ -18,7 +18,7 @@
 - **프레임워크**: [Next.js 16.0.6](https://nextjs.org/) (App Router, Turbopack)
 - **언어**: TypeScript 5
 - **스타일링**: Tailwind CSS 4
-- **백엔드**: [Supabase](https://supabase.com/) (PostgreSQL)
+- **데이터 저장**: localStorage
 - **애니메이션**: Framer Motion
 - **패키지 매니저**: pnpm
 - **코드 품질**: ESLint, Prettier
@@ -67,7 +67,7 @@ src/
 │   └── reading-save/     # 운세 저장 기능
 │
 ├── shared/               # 공유 모듈
-│   ├── api/              # API 클라이언트 (Supabase)
+│   ├── api/              # API 클라이언트 (localStorage)
 │   ├── config/           # 공유 설정
 │   ├── lib/              # 유틸리티 함수
 │   └── ui/               # 공유 UI 컴포넌트
@@ -183,17 +183,9 @@ pnpm format:check
 3. 환경 변수 설정
 4. 배포 완료!
 
-### 환경 변수 설정 (Vercel)
-
-Vercel 대시보드에서 다음 환경 변수를 설정하세요:
-
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-
 ## 📚 참고 자료
 
 - [Next.js 문서](https://nextjs.org/docs)
-- [Supabase 문서](https://supabase.com/docs)
 - [Tailwind CSS 문서](https://tailwindcss.com/docs)
 - [FSD 아키텍처](https://feature-sliced.design/)
 
