@@ -9,6 +9,7 @@ import { apiClient } from '@/shared/api';
 import { useToast } from '@/shared/ui/toast';
 
 const MAX_CARDS = 3;
+const DECK_CARD_COUNT = 26;
 
 export default function CategoryPage() {
   const params = useParams();
@@ -29,7 +30,7 @@ export default function CategoryPage() {
   const [windowWidth, setWindowWidth] = useState(0);
   // 각 카드의 셔플 애니메이션 랜덤 값을 초기값으로 생성 (한 번만 실행됨)
   const [shuffleAnimations] = useState(() =>
-    Array.from({ length: 33 }).map(() => ({
+    Array.from({ length: DECK_CARD_COUNT }).map(() => ({
       x: Math.random() * 40 - 20,
       y: Math.random() * 40 - 20,
       rotate: Math.random() * 10 - 5,
@@ -65,7 +66,10 @@ export default function CategoryPage() {
 
     // 클릭한 카드의 인덱스 찾기
     const target = event.currentTarget as HTMLElement;
-    const cardIndex = parseInt(target.getAttribute('data-card-index') || '16');
+    const cardIndex = parseInt(
+      target.getAttribute('data-card-index') ||
+        String(Math.floor(DECK_CARD_COUNT / 2))
+    );
     setClickedCardIndex(cardIndex);
 
     // 1. Randomly select a card (중복 방지)
@@ -263,7 +267,7 @@ export default function CategoryPage() {
       <div className="relative w-full max-w-6xl flex items-center justify-center px-2 sm:px-4 overflow-visible">
         {/* Card Deck Animation */}
         <div className="relative w-full md:w-[600px] min-h-[400px] md:min-h-[500px] flex items-center justify-center overflow-visible py-8 md:py-12">
-          {Array.from({ length: 33 }).map((_, index) => {
+          {Array.from({ length: DECK_CARD_COUNT }).map((_, index, array) => {
             // 화면 크기에 따른 카드 크기 및 간격 조정
             const isMobile = windowWidth > 0 && windowWidth < 768;
             const isTablet = windowWidth >= 768 && windowWidth < 1024;
@@ -272,23 +276,34 @@ export default function CategoryPage() {
 
             // 모든 디바이스에서 바닥에 눕혀진 완전 평면 부채꼴 형태로 배치 (x, y만 사용)
             let cardX, cardY, cardRotate;
-            const startIndex = index - 16;
+            const startIndex = index - array.length / 2;
 
             // 화면 크기에 따른 간격 조정
-            const cardSpacing = isMobile ? 10 : isTablet ? 12 : 18;
+            const cardSpacing = isMobile ? 12 : isTablet ? 12 : 22;
 
             if (isMobile) {
-              // 모바일: 세로 부채꼴 형태 (90도 회전하여 세로로 배치)
-              // x, y 좌표를 교환하여 세로 방향으로 배치
-              cardX = Math.pow(Math.abs(startIndex) / 4, 1.5) * -10; // 좌우 효과
-              cardY = startIndex * cardSpacing; // 세로 간격
-              cardRotate = 90; // 90도 회전하여 세로로
+              // 모바일: 2줄로 배치 (부채꼴 형태)
+              const cardsPerRow = Math.ceil(array.length / 2); // 각 줄당 카드 수 (13장)
+              const rowIndex = Math.floor(index / cardsPerRow); // 줄 번호 (0 또는 1)
+              const colIndex = index % cardsPerRow; // 각 줄 내에서의 위치 (0-12)
+              const rowStartIndex = colIndex - cardsPerRow / 2; // 각 줄 내에서의 중앙 기준 인덱스
+
+              cardX = rowStartIndex * cardSpacing; // 가로 간격
+              // 부채꼴 효과: 위 줄은 아래로, 아래 줄은 위로
+              const fanEffect = Math.pow(Math.abs(rowStartIndex) / 4, 2) * 15;
+              // 아래 줄(rowIndex === 1)일 때는 반대 방향으로
+              const adjustedFanEffect = rowIndex === 0 ? fanEffect : -fanEffect;
+              // 모바일에서 카드 위치를  위로 올림
+              const verticalOffset = -cardHeight * 0.8;
+              cardY =
+                rowIndex * (cardHeight + 80) +
+                adjustedFanEffect +
+                verticalOffset; // 세로 간격 (줄 간격) + 부채꼴 효과 + 상단 오프셋
+              cardRotate = 0;
             } else {
               // 데스크톱/태블릿: 가로 부채꼴 형태
               cardX = startIndex * cardSpacing * 1.5;
-              cardY =
-                Math.pow(Math.abs(startIndex) / 4, 1.5) *
-                (isTablet ? -10 : -10);
+              cardY = Math.pow(Math.abs(startIndex) / 4, 2) * -10;
               cardRotate = 0; // 회전 없음 (완전 평면)
             }
 
@@ -458,7 +473,7 @@ export default function CategoryPage() {
                         scale: 1.2,
                         rotate:
                           clickedCardIndex !== null
-                            ? (clickedCardIndex - 16) * 1.8
+                            ? (clickedCardIndex - DECK_CARD_COUNT / 2) * 1.8
                             : 0,
                         opacity: 0,
                       }}
