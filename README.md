@@ -1,6 +1,6 @@
-# 🎴 2026 신년운세 타로
+# 2026 신년운세 타로
 
-2026년 새해를 맞아 타로로 운세를 확인할 수 있는 웹 서비스입니다. Next.js와 Supabase를 활용하여 비용 효율적으로 구축되었습니다.
+2026년 새해를 맞아 타로로 운세를 확인할 수 있는 웹 서비스입니다. Next.js와 localStorage를 활용하여 구축되었습니다.
 
 ## 📋 목차
 
@@ -18,29 +18,28 @@
 - **프레임워크**: [Next.js 16.0.6](https://nextjs.org/) (App Router, Turbopack)
 - **언어**: TypeScript 5
 - **스타일링**: Tailwind CSS 4
-- **백엔드**: [Supabase](https://supabase.com/) (PostgreSQL)
+- **데이터 저장**: localStorage
 - **애니메이션**: Framer Motion
 - **패키지 매니저**: pnpm
 - **코드 품질**: ESLint, Prettier
 
 ## 🏗 아키텍처
 
-이 프로젝트는 **FSD (Feature-Sliced Design)** 아키텍처를 적용하고 있습니다.
+이 프로젝트는 **Next.js 표준 폴더 구조**를 따르고 있습니다.
 
-FSD는 확장 가능하고 유지보수가 용이한 프론트엔드 아키텍처 패턴으로, 다음과 같은 레이어 구조를 가집니다:
+Next.js의 App Router를 기반으로 하며, 다음과 같은 구조로 구성되어 있습니다:
 
 - **app**: Next.js App Router 페이지 및 레이아웃
-- **widgets**: 복합 UI 컴포넌트 (페이지 레벨)
-- **features**: 비즈니스 기능 단위
-- **entities**: 비즈니스 엔티티 (도메인 모델)
-- **shared**: 공유 모듈 (API 클라이언트, 유틸리티, UI 컴포넌트)
+- **components**: 재사용 가능한 UI 컴포넌트
+- **lib**: 유틸리티 함수, API 클라이언트, 라이브러리 코드
+- **hooks**: 커스텀 React 훅
 
-### FSD의 장점
+### 구조의 장점
 
-- **확장성**: 새로운 기능 추가 시 명확한 위치 파악
-- **재사용성**: 레이어 간 의존성 규칙으로 재사용성 향상
-- **유지보수성**: 코드 구조가 명확하여 유지보수 용이
-- **협업**: 팀원 간 코드 위치 예측 가능
+- **명확성**: Next.js 표준 구조로 직관적인 파일 위치 파악
+- **재사용성**: 컴포넌트와 훅의 명확한 분리로 재사용성 향상
+- **유지보수성**: 표준 구조로 유지보수 용이
+- **확장성**: 프로젝트 규모에 맞는 간단하고 확장 가능한 구조
 
 ## 📁 프로젝트 구조
 
@@ -49,30 +48,38 @@ src/
 ├── app/                    # Next.js App Router
 │   ├── page.tsx           # 홈 페이지
 │   ├── layout.tsx         # 루트 레이아웃
+│   ├── api/               # API 라우트
+│   │   └── tarot-interpretation/  # AI 해석 API
 │   ├── category/[slug]/   # 카테고리별 타로 뽑기 페이지
 │   ├── result/[id]/       # 타로 결과 페이지
 │   └── history/           # 운세 기록 페이지
 │
-├── entities/              # 비즈니스 엔티티
-│   ├── category/          # 카테고리 엔티티
-│   │   ├── config/        # 카테고리 설정
-│   │   ├── model/         # 카테고리 모델
-│   │   └── ui/            # 카테고리 UI 컴포넌트
-│   └── tarot-card/        # 타로 카드 엔티티
-│       ├── model/         # 타로 카드 데이터
-│       └── ui/            # 타로 카드 UI 컴포넌트
+├── components/            # UI 컴포넌트
+│   ├── category/          # 카테고리 관련 컴포넌트
+│   │   └── CategoryCard.tsx
+│   └── ui/                # 공통 UI 컴포넌트
+│       ├── Modal.tsx
+│       ├── Toast.tsx
+│       ├── ToastContainer.tsx
+│       └── ShareButton.tsx
 │
-├── features/              # 비즈니스 기능
-│   ├── card-selection/    # 카드 선택 기능
-│   └── reading-save/     # 운세 저장 기능
+├── lib/                   # 유틸리티 및 라이브러리
+│   ├── api/               # API 클라이언트 (localStorage)
+│   │   ├── api-client.ts
+│   │   └── storage.ts
+│   ├── ai/                # AI 관련 코드
+│   │   └── tarot-agent.ts
+│   ├── stores/            # 상태 관리 스토어
+│   │   ├── modalStore.ts
+│   │   └── toastStore.ts
+│   ├── categories.ts      # 카테고리 설정 및 타입
+│   ├── tarot-data.ts      # 타로 카드 데이터
+│   └── tarot-image-mapper.ts  # 이미지 매핑 유틸리티
 │
-├── shared/               # 공유 모듈
-│   ├── api/              # API 클라이언트 (Supabase)
-│   ├── config/           # 공유 설정
-│   ├── lib/              # 유틸리티 함수
-│   └── ui/               # 공유 UI 컴포넌트
-│
-└── widgets/              # 복합 UI 컴포넌트
+└── hooks/                 # 커스텀 React 훅
+    ├── useToast.ts
+    ├── useModal.ts
+    └── useShare.ts
 ```
 
 ## 🚀 시작하기
@@ -102,17 +109,18 @@ pnpm dev
 프로젝트 루트에 `.env.local` 파일을 생성하고 다음 환경 변수를 설정하세요:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+# Google Gemini API Key (필수)
+# Google AI Studio에서 발급: https://makersuite.google.com/app/apikey
+GOOGLE_GENERATIVE_AI_API_KEY=your_google_api_key_here
 ```
 
-### Supabase 설정
+### Google Gemini API 설정
 
-1. [Supabase](https://supabase.com/)에서 프로젝트 생성
-2. `supabase_schema.sql` 파일의 SQL을 실행하여 데이터베이스 스키마 생성
-3. 환경 변수에 프로젝트 URL과 Anon Key 입력
+1. [Google AI Studio](https://makersuite.google.com/app/apikey)에서 API 키 발급
+2. `.env.local` 파일에 `GOOGLE_GENERATIVE_AI_API_KEY` 환경 변수 설정
+3. API 키는 서버 사이드에서만 사용되므로 `NEXT_PUBLIC_` 접두사 불필요
 
-> **참고**: 환경 변수가 설정되지 않은 경우 빌드는 성공하지만, 실제 데이터베이스 연동은 작동하지 않습니다.
+> **참고**: 환경 변수가 설정되지 않은 경우 AI 해석 기능이 작동하지 않으며, 기본 해석만 표시됩니다.
 
 ## ✨ 주요 기능
 
@@ -182,19 +190,11 @@ pnpm format:check
 3. 환경 변수 설정
 4. 배포 완료!
 
-### 환경 변수 설정 (Vercel)
-
-Vercel 대시보드에서 다음 환경 변수를 설정하세요:
-
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-
 ## 📚 참고 자료
 
 - [Next.js 문서](https://nextjs.org/docs)
-- [Supabase 문서](https://supabase.com/docs)
 - [Tailwind CSS 문서](https://tailwindcss.com/docs)
-- [FSD 아키텍처](https://feature-sliced.design/)
+- [React 문서](https://react.dev/)
 
 ## 📝 라이선스
 

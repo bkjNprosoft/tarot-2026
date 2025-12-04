@@ -12,13 +12,16 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.86.0",
+    "@ai-sdk/google": "^2.0.44",
+    "@mastra/core": "1.0.0-beta.5",
     "clsx": "^2.1.1",
+    "html-to-image": "^1.11.13",
     "motion": "^12.23.25",
     "next": "16.0.6",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

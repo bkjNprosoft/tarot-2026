@@ -1,5 +1,6 @@
-import { CATEGORY_CONFIG, ReadingCategory } from '@/entities/category/config/categories';
-import CategoryCard from '@/entities/category/ui/CategoryCard';
+import Link from 'next/link';
+import { CATEGORY_CONFIG } from '@/lib/categories';
+import CategoryCard from '@/components/category/CategoryCard';
 
 export default function HomePage() {
   const categories = Object.entries(CATEGORY_CONFIG);
@@ -9,7 +10,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="py-20 px-4 text-center text-white">
         <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200">
-          🎴 2026 신년운세 타로
+          2026 신년운세 타로
         </h1>
         <p className="text-xl md:text-2xl opacity-90 mt-6">
           새해를 맞아 타로로 당신의 2026년을 미리 만나보세요
@@ -26,6 +27,16 @@ export default function HomePage() {
             <CategoryCard key={slug} slug={slug} config={config} />
           ))}
         </div>
+      </section>
+
+      {/* History Button */}
+      <section className="container mx-auto px-4 pb-10 flex justify-center">
+        <Link
+          href="/history"
+          className="px-8 py-3 bg-white/10 text-white rounded-full font-bold hover:bg-white/20 transition-colors backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-xl"
+        >
+          이전 타로 결과 보기
+        </Link>
       </section>
 
       {/* Footer */}

@@ -77,3 +77,9 @@ prisma/migrations/
 .cache
 .turbo
 .eslintcache
+
+# my rules
+commit-message.txt
+COMMIT_MESSAGE.txt
+
+
