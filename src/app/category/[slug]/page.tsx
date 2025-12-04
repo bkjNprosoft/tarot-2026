@@ -248,7 +248,7 @@ export default function CategoryPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`text-center mb-12 z-10 -mt-5`}
+        className={`text-center mb-12 z-10`}
       >
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
           {category.title}
@@ -279,7 +279,7 @@ export default function CategoryPage() {
             const startIndex = index - array.length / 2;
 
             // 화면 크기에 따른 간격 조정
-            const cardSpacing = isMobile ? 12 : isTablet ? 12 : 22;
+            const cardSpacing = isMobile ? 12 : isTablet ? 16 : 22;
 
             if (isMobile) {
               // 모바일: 2줄로 배치 (부채꼴 형태)
@@ -303,7 +303,9 @@ export default function CategoryPage() {
             } else {
               // 데스크톱/태블릿: 가로 부채꼴 형태
               cardX = startIndex * cardSpacing * 1.5;
-              cardY = Math.pow(Math.abs(startIndex) / 4, 2) * -10;
+              const baseCardY = Math.pow(Math.abs(startIndex) / 4, 2) * -10;
+              // 태블릿일 때 카드 위치를 60px 위로 올림
+              cardY = isTablet ? baseCardY - 60 : baseCardY;
               cardRotate = 0; // 회전 없음 (완전 평면)
             }
 
@@ -411,15 +413,19 @@ export default function CategoryPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className={`fixed ${
-              windowWidth > 0 && windowWidth <= 768
-                ? 'top-1/2 -translate-y-1/2 right-4 flex flex-col items-end justify-center'
-                : 'top-1/2 -translate-y-1/2 right-4 md:right-8 flex flex-col items-end justify-center'
-            } gap-3 z-[60]`}
+              windowWidth > 0 && windowWidth < 768
+                ? 'bottom-4 left-1/2 -translate-x-1/2 flex flex-row items-center justify-center'
+                : windowWidth >= 768 && windowWidth < 1024
+                  ? 'bottom-24 left-1/2 -translate-x-1/2 flex flex-row items-center justify-center'
+                  : 'top-1/2 -translate-y-1/2 right-4 md:right-8 flex flex-col items-end justify-center'
+            } ${
+              windowWidth > 0 && windowWidth < 1024 ? 'gap-2' : 'gap-3'
+            } z-[60]`}
           >
             <div
               className={
-                windowWidth > 0 && windowWidth <= 768
-                  ? 'flex flex-col gap-3'
+                windowWidth > 0 && windowWidth < 1024
+                  ? 'flex flex-row gap-2'
                   : 'flex flex-col gap-3'
               }
             >
@@ -444,13 +450,19 @@ export default function CategoryPage() {
                       : 0; // 카드 높이의 절반
 
                   // 선택된 카드 위치
-                  const isMobile = windowWidth > 0 && windowWidth <= 768;
+                  const isMobileOrTablet =
+                    windowWidth > 0 && windowWidth < 1024;
+                  const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
-                  // 모바일: 컨테이너 세로 중앙 우측 위치
+                  // 모바일/태블릿: 컨테이너 하단 중앙 위치
                   const mobileContainerX =
-                    typeof window !== 'undefined' ? window.innerWidth - 80 : 0;
+                    typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
                   const mobileContainerY =
-                    typeof window !== 'undefined' ? window.innerHeight / 2 : 0;
+                    typeof window !== 'undefined'
+                      ? isTablet
+                        ? window.innerHeight - 96 // 태블릿: bottom-24 (96px)
+                        : window.innerHeight - 100 // 모바일: bottom-4 (16px) + 여유공간
+                      : 0;
 
                   // 데스크톱: 우측 상단 위치
                   const desktopX =
@@ -464,11 +476,11 @@ export default function CategoryPage() {
                     <motion.div
                       key={cardId}
                       initial={{
-                        x: isMobile
-                          ? deckCenterX - mobileContainerX // 모바일: 덱 중앙에서 컨테이너 중앙으로
+                        x: isMobileOrTablet
+                          ? deckCenterX - mobileContainerX // 모바일/태블릿: 덱 중앙에서 하단 중앙으로
                           : deckCenterX - desktopX, // 데스크톱: 덱 중앙에서 우측 상단으로
-                        y: isMobile
-                          ? deckCenterY - mobileContainerY // 모바일: 덱 중앙에서 컨테이너 상단으로
+                        y: isMobileOrTablet
+                          ? deckCenterY - mobileContainerY // 모바일/태블릿: 덱 중앙에서 하단으로
                           : deckCenterY - desktopY, // 데스크톱: 덱 중앙에서 우측 상단으로
                         scale: 1.2,
                         rotate:
@@ -495,7 +507,11 @@ export default function CategoryPage() {
                         delay: index * 0.1,
                       }}
                       className={`${
-                        isMobile ? 'w-[72px]' : 'w-24'
+                        isTablet
+                          ? 'w-[86px]'
+                          : isMobileOrTablet
+                            ? 'w-[72px]'
+                            : 'w-24'
                       } rounded-xl shadow-2xl relative animate-border-flow`}
                       style={
                         {
