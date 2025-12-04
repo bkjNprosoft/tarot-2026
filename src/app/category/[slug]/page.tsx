@@ -398,8 +398,8 @@ export default function CategoryPage() {
             animate={{ opacity: 1, x: 0 }}
             className={`fixed ${
               windowWidth > 0 && windowWidth <= 768
-                ? 'top-1/2 -translate-y-1/2 right-4 flex flex-col items-end'
-                : 'top-[5vh] right-4 md:right-8 flex flex-col items-end'
+                ? 'top-1/2 -translate-y-1/2 right-4 flex flex-col items-end justify-center'
+                : 'top-1/2 -translate-y-1/2 right-4 md:right-8 flex flex-col items-end justify-center'
             } gap-3 z-[60]`}
           >
             <div
