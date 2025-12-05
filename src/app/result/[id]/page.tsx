@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { apiClient, ReadingResult } from '@/lib/api';
 import { getCardById } from '@/lib/tarot-data';
 import { CATEGORIES } from '@/lib/categories';
