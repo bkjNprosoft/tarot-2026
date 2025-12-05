@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { CATEGORIES } from '@/lib/categories';
 import { TAROT_CARDS, getCardById } from '@/lib/tarot-data';
 import { apiClient } from '@/lib/api';
