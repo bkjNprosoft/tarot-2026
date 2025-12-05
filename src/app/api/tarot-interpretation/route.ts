@@ -9,15 +9,23 @@ export interface InterpretationRequest {
   cardOrientations?: boolean[]; // 각 카드의 reversed 여부 (true = reversed, false = upright)
 }
 
+export interface MusicRecommendation {
+  title: string;
+  youtubeSearchUrl: string;
+  type: 'korean' | 'global';
+}
+
 export interface InterpretationResponse {
   individualCards: Array<{
     cardId: string;
     cardName: string;
     interpretation: string;
+    musicRecommendations?: MusicRecommendation[];
   }>;
   combination: {
     summary: string;
     detailed: string;
+    musicRecommendations?: MusicRecommendation[];
   };
 }
 

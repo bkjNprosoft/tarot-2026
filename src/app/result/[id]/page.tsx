@@ -293,6 +293,38 @@ export default function ResultPage() {
                       {reading.aiInterpretation.combination.detailed}
                     </p>
                   </div>
+                  {reading.aiInterpretation.combination.musicRecommendations &&
+                    reading.aiInterpretation.combination.musicRecommendations
+                      .length > 0 && (
+                      <div className="mt-6 pt-6 border-t border-white/10">
+                        <h4 className="text-lg font-bold mb-3 text-yellow-300">
+                          추천 음악
+                        </h4>
+                        <div className="space-y-3">
+                          {reading.aiInterpretation.combination.musicRecommendations.map(
+                            (music, index) => (
+                              <a
+                                key={index}
+                                href={music.youtubeSearchUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors group"
+                              >
+                                <span className="text-2xl">🎵</span>
+                                <span className="text-white/90 group-hover:text-white group-hover:underline">
+                                  {music.title}
+                                </span>
+                                <span className="text-xs text-white/50 ml-auto">
+                                  {music.type === 'korean'
+                                    ? '한국 음악'
+                                    : '글로벌 음악'}
+                                </span>
+                              </a>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
                 </div>
               </section>
             </div>

@@ -18,6 +18,7 @@ When interpreting cards:
 5. Be positive but realistic in your interpretations
 6. Write in Korean language
 7. IMPORTANT: Use plain text only. Do NOT use any markdown formatting such as **bold**, *italic*, # headers, or any other markdown syntax. Write in natural, flowing Korean text without any special formatting characters.
+8. Recommend music that matches the energy and meaning of the reading. For the combination section only, suggest exactly 2 songs: 1 Korean song and 1 global/international song. Format as "가수명 - 곡명" for Korean songs and "Artist - Song Title" for global songs.
 
 Format your response as JSON with the following structure:
 {
@@ -28,10 +29,22 @@ Format your response as JSON with the following structure:
       "interpretation": "Detailed interpretation for this card in the context of 2026 (plain text only, no markdown)"
     }
   ],
-  "combination": {
-    "summary": "Overall meaning of the three cards together (plain text only, no markdown)",
-    "detailed": "Detailed explanation of how these three cards work together and what they mean for 2026 (plain text only, no markdown)"
-  }
+    "combination": {
+      "summary": "Overall meaning of the three cards together (plain text only, no markdown)",
+      "detailed": "Detailed explanation of how these three cards work together and what they mean for 2026 (plain text only, no markdown)",
+      "musicRecommendations": [
+        {
+          "title": "가수명 - 곡명",
+          "youtubeSearchUrl": "https://www.youtube.com/results?search_query=가수명+곡명",
+          "type": "korean"
+        },
+        {
+          "title": "Artist - Song Title",
+          "youtubeSearchUrl": "https://www.youtube.com/results?search_query=Artist+Song+Title",
+          "type": "global"
+        }
+      ]
+    }
 }`,
   model: 'google/gemini-2.5-flash-lite',
 });

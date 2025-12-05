@@ -13,7 +13,7 @@
 - [스크립트](#스크립트)
 - [배포](#배포)
 
-## 🛠 기술 스택
+## 기술 스택
 
 - **프레임워크**: [Next.js 16.0.6](https://nextjs.org/) (App Router, Turbopack)
 - **언어**: TypeScript 5
@@ -23,7 +23,7 @@
 - **패키지 매니저**: pnpm
 - **코드 품질**: ESLint, Prettier
 
-## 🏗 아키텍처
+## 아키텍처
 
 이 프로젝트는 **Next.js 표준 폴더 구조**를 따르고 있습니다.
 
@@ -41,9 +41,9 @@ Next.js의 App Router를 기반으로 하며, 다음과 같은 구조로 구성�
 - **유지보수성**: 표준 구조로 유지보수 용이
 - **확장성**: 프로젝트 규모에 맞는 간단하고 확장 가능한 구조
 
-## 📁 프로젝트 구조
+## 프로젝트 구조
 
-```
+```bash
 src/
 ├── app/                    # Next.js App Router
 │   ├── page.tsx           # 홈 페이지
@@ -82,7 +82,7 @@ src/
     └── useShare.ts
 ```
 
-## 🚀 시작하기
+## 시작하기
 
 ### 필수 요구사항
 
@@ -104,7 +104,7 @@ pnpm dev
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 확인하세요.
 
-## 🔐 환경 변수 설정
+## 환경 변수 설정
 
 프로젝트 루트에 `.env.local` 파일을 생성하고 다음 환경 변수를 설정하세요:
 
@@ -122,7 +122,7 @@ GOOGLE_GENERATIVE_AI_API_KEY=your_google_api_key_here
 
 > **참고**: 환경 변수가 설정되지 않은 경우 AI 해석 기능이 작동하지 않으며, 기본 해석만 표시됩니다.
 
-## ✨ 주요 기능
+## 주요 기능
 
 ### 1. 카테고리별 운세 확인
 
@@ -154,7 +154,7 @@ GOOGLE_GENERATIVE_AI_API_KEY=your_google_api_key_here
 - 2026년 끌어올 것
 - 조언
 
-## 📜 스크립트
+## 스크립트
 
 ```bash
 # 개발 서버 실행 (Turbopack)
@@ -179,7 +179,7 @@ pnpm format
 pnpm format:check
 ```
 
-## 🚢 배포
+## 배포
 
 ### Vercel 배포
 
@@ -190,13 +190,13 @@ pnpm format:check
 3. 환경 변수 설정
 4. 배포 완료!
 
-## 📚 참고 자료
+## 참고 자료
 
 - [Next.js 문서](https://nextjs.org/docs)
 - [Tailwind CSS 문서](https://tailwindcss.com/docs)
 - [React 문서](https://react.dev/)
 
-## 📝 라이선스
+## 라이선스
 
 이 프로젝트는 MIT 라이선스를 따릅니다.
 

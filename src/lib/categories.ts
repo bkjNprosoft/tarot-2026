@@ -14,6 +14,7 @@ export interface CategoryConfig {
   description: string;
   color: string;
   gradient: string;
+  borderColor: string; // 단일 색상 HEX 코드 (카드 테두리 애니메이션용, 배경 테마의 보색)
   icon: string;
   emoji: string;
 }
@@ -24,6 +25,7 @@ export const CATEGORY_CONFIG: Record<ReadingCategory, CategoryConfig> = {
     description: '2026년 전반적인 운세',
     color: 'purple',
     gradient: 'from-purple-500 to-indigo-600',
+    borderColor: '#fbbf24', // 노란색 계열 보색
     icon: '🔮',
     emoji: '✨',
   },
@@ -32,6 +34,7 @@ export const CATEGORY_CONFIG: Record<ReadingCategory, CategoryConfig> = {
     description: '직장과 경력 발전',
     color: 'blue',
     gradient: 'from-blue-500 to-cyan-600',
+    borderColor: '#f97316', // 주황색 계열 보색
     icon: '💼',
     emoji: '🚀',
   },
@@ -40,6 +43,7 @@ export const CATEGORY_CONFIG: Record<ReadingCategory, CategoryConfig> = {
     description: '금전운과 재정 상태',
     color: 'green',
     gradient: 'from-emerald-500 to-teal-600',
+    borderColor: '#ef4444', // 빨간색 계열 보색
     icon: '💰',
     emoji: '💎',
   },
@@ -48,6 +52,7 @@ export const CATEGORY_CONFIG: Record<ReadingCategory, CategoryConfig> = {
     description: '사랑과 로맨스',
     color: 'pink',
     gradient: 'from-pink-500 to-rose-600',
+    borderColor: '#14b8a6', // 청록색 계열 보색
     icon: '❤️',
     emoji: '💕',
   },
@@ -56,6 +61,7 @@ export const CATEGORY_CONFIG: Record<ReadingCategory, CategoryConfig> = {
     description: '가족, 친구, 동료 관계',
     color: 'orange',
     gradient: 'from-orange-500 to-amber-600',
+    borderColor: '#3b82f6', // 파란색 계열 보색
     icon: '🤝',
     emoji: '👥',
   },
@@ -64,6 +70,7 @@ export const CATEGORY_CONFIG: Record<ReadingCategory, CategoryConfig> = {
     description: '신체적, 정신적 건강',
     color: 'teal',
     gradient: 'from-teal-500 to-cyan-600',
+    borderColor: '#ef4444', // 빨간색 계열 보색
     icon: '🏥',
     emoji: '💪',
   },
@@ -72,6 +79,7 @@ export const CATEGORY_CONFIG: Record<ReadingCategory, CategoryConfig> = {
     description: '조심하고 멀리해야 할 것',
     color: 'red',
     gradient: 'from-red-500 to-orange-600',
+    borderColor: '#10b981', // 초록색 계열 보색
     icon: '⚠️',
     emoji: '🚫',
   },
@@ -80,6 +88,7 @@ export const CATEGORY_CONFIG: Record<ReadingCategory, CategoryConfig> = {
     description: '가까이하고 키워야 할 것',
     color: 'yellow',
     gradient: 'from-yellow-500 to-amber-600',
+    borderColor: '#a855f7', // 보라색 계열 보색
     icon: '✨',
     emoji: '🌟',
   },
@@ -91,6 +100,7 @@ export interface Category {
   description: string;
   color: string;
   gradient: string;
+  borderColor: string;
   icon: string;
   emoji: string;
 }
